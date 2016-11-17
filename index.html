@@ -97,10 +97,6 @@
         }
       };
       
-      function sendCode(code){
-        
-      }
-      
       function addCommand(command){
         if(enabledCommands.indexOf(command)==-1){
           enabledCommands.push(command);
@@ -125,6 +121,11 @@
         },
         sigma:function(){
           viewSigmaLogo("SIGMA");
+          waitForInput(func);
+        },
+        clear:function(){
+          clearConsole();
+          logn("CLEARED CONSOLE.");
           waitForInput(func);
         },
         code:function(){
@@ -417,14 +418,12 @@
           setCookie("SIGMA-satLocation",satelliteLocation);
         });
         
+        enabledCommands = ["help","exit","sigma","code","interpol","clear"]; 
         var savedCommands = getCookie("SIGMA-commands").split(",");
         if(savedCommands&&savedCommands.length>1){
-          enabledCommands = [];
           for(var i = 0;i<savedCommands.length;++i){
             addCommand(savedCommands[i]);
           }
-        }else{
-          enabledCommands = ["help","exit","sigma","code","interpol,"]; 
         }
         
         var satLocation = getCookie("SIGMA-satLocation");
