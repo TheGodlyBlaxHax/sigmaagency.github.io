@@ -272,13 +272,15 @@
             logn("RESPONSE RECIEVED.");
             logn('FS PCAET UP IOPX. RCPE "ODVMPBE UBDAFYAE" YFD QKC DNEA DNSSCLCY');
           }
+          waitForInput(func);
         },
         payload:function(){
           if(satelliteLocation!=2){
             logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
           }else{
             logn("PAYLOAD IN PLACE. EXTRACTION IN PROGRESS. STANDBY FOR MORE INFORMATION.");
-          }        
+          }
+          waitForInput(func);
         },
         email:function(){
           if(satelliteLocation==2){
