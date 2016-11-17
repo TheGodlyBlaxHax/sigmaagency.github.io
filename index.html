@@ -19,20 +19,28 @@
         <link href="favicon.ico"rel="shortcut icon"type="image/x-icon">
         
         <style>
+          html,body{
+            height:100%;
+          }
+        
           body{
             background-color:black;
             color:green;
-            font-family:'Courier';
+            font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
             font-size:1em;
+            display: flex;
+            flex-direction: column; 
           }
           
-          #input{
+          #input,textarea{
             background-color: rgba(0,0,0,0);
             border:none;
             font-size:1em;
-            height:100% !important;
+            height:100%;
             width:99%;
             color:green;
+            resize: none;
+            box-sizing: border-box;
           }
           
           .red{
@@ -43,10 +51,8 @@
         </style>
     </head>
     <body>
-      <span id="console">
-        
-      </span>
-      <textarea id="input"rows="40"></textarea>
+      <code id="console"></code>
+      <textarea id="input"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
     </body>
     <!--Scripts are loaded in here, at the end, to make it fastest-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"type="text/javascript"></script>
@@ -65,7 +71,7 @@
       var strikes = 0;
       
       var func = function(result){
-        if(enabledCommands.indexOf(result)>=0){
+        if(result&&result!=""&&enabledCommands.indexOf(result)>=0&&commands[result]){
           commands[result]();
         }else{
           logn("Invalid command");
@@ -78,11 +84,15 @@
       var enabledCommands;
       var commands = {
         help:function(){
-          logn("AGENTS SHOULDN'T NEED HELP");
+          logn("AGENTS SHOULDN'T NEED <span class='red'>HELP</span>");
           waitForInput(func);
         },
         exit:function(){
-          logn("YOU CAN'T LEAVE WHILE THERE IS STILL WORK TO DO");
+          if(satelliteLocation==1){
+            logn("YOU CAN'T LEAVE WHILE THERE IS STILL <span class='red'>WORK</span> TO DO");
+          }else{
+            logn("JUST BECAUSE YOU ARE DONE WITH YOUR WORK DOES NOT MEAN YOU CAN LEAVE. <span class='red'>STAY PUT</span> AND WAIT FOR MORE ORDERS.");
+          }
           waitForInput(func);
         },
         sigma:function(){
@@ -90,65 +100,61 @@
           waitForInput(func);
         },
         code:function(){
-          logn("Starting server uplink...");
-            for(var i =0;i<10;++i){
-              log(".");
-            }
-            logn("Done.");
-            logn("Message from server:");
-            logn("Please enter real first and last name. Anything other than your real name will fail.");
-            waitForInput(function(name){
-              logn("Sent username "+name);
-              logn("Please enter message:");
-              waitForInput(function(message){
-                logn("Sent message "+message);
-                logn("Waiting for response...");
+          logn("CONNECTING TO SERVER...");
+          logn("INFORMATION REQUIRED:");
+          logn("PLEASE ENTER <span id='red'>REAL NAME.</span>");
+          waitForInput(function(name){
+            logn("USING NAME "+name);
+            logn("ENTER CODE TO SEND:");
+            waitForInput(function(message){
+              var settings = {
+                "async": true,
+                "crossDomain": true,
+                "dataType":"jsonp",
+                "url": "https://script.google.com/macros/s/AKfycbwUZGwN_7lKybnQb8bBLEc1vhMTsXWQUDu28vJSMAaDdVw8A832/exec",
+                "method": "POST",
+                "headers": {
+                  "cache-control": "no-cache",
+                },
+                "data": {
+                    "name":encodeURIComponent(name),
+                    "message":encodeURIComponent(message),
+                    "callback":"foo"
+                }
+              };
+            
+              logn("SENT CODE "+message);
+              
+              $.ajax(settings).done(function (response) {
+                var json = JSON.parse(response);
+                logn(json.message);
                 
-                var settings = {
-                  "async": true,
-                  "crossDomain": true,
-                  "dataType":"jsonp",
-                  "url": "https://script.google.com/macros/s/AKfycbwUZGwN_7lKybnQb8bBLEc1vhMTsXWQUDu28vJSMAaDdVw8A832/exec",
-                  "method": "POST",
-                  "headers": {
-                    "cache-control": "no-cache",
-                  },
-                  "data": {
-                      "name":encodeURIComponent(name),
-                      "message":encodeURIComponent(message),
-                      "callback":"foo"
+                if(json.message=="WRONG!"){
+                  ++strikes;
+                  logn("You have "+strikes+" strike"+(strikes!=1 ? "s" : ""));
+                  if(strikes==1){
+                    $("#console").toggleClass("red");
+                    $("#input").toggleClass("red");
+                  }else if(strikes==2){
+                    $("body").toggleClass("glitch");
+                    $("#console").toggleClass("glitch");
+                    $("#console").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
+                  }else if(strikes==3){
+                    clearConsole();
+                    viewSigmaLogo("ACCESS DENIED");
                   }
-                };
-                
-                $.ajax(settings).done(function (response) {
-                  var json = JSON.parse(response);
-                  logn(json.message);
+                }else{
+                  strikes = 0;
                   
-                  if(json.message=="WRONG!"){
-                    ++strikes;
-                    logn("You have "+strikes+" strike"+(strikes!=1 ? "s" : ""));
-                    if(strikes==1){
-                      $("#console").toggleClass("red");
-                      $("#input").toggleClass("red");
-                    }else if(strikes==2){
-                      $("body").toggleClass("glitch");
-                      $("#console").toggleClass("glitch");
-                      $("#console").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
-                    }else if(strikes==3){
-                      clearConsole();
-                      viewSigmaLogo("ACCESS DENIED");
-                    }
-                  }else{
-                    strikes = 0;
-                    
-                    enabledCommands.push(json.command);
-                  }
-                  
-                  waitForInput(func);
-                });
+                  enabledCommands.push(json.command);
+                }
                 
+                waitForInput(func);
               });
+              
+              logn("WAITING FOR REQUEST...");
             });
+          });
         },
         interpol:function(){
           logn("<span class='red'>DO NOT MENTION THAT NAME</span>");
@@ -162,10 +168,10 @@
             logn("SATELLITE IS N<i>O</i>T BRO<i>A</i>DCASTING ANY MESSAGES");
             logn("CURRENTLY POINTE<i>D</i> AT 33.022696, 96.719394 (PLANO ACADEMY HS)");
           }else if(satelliteLocation==2){
-            logn("SATELLITE IS BR<i>OA</i>DCASTING MESSAGES. USE DOWNLOAD TO RETRIEVE.");
+            logn("SATELLITE IS BR<i>OA</i>DCASTING MESSAGES.");
             logn("CURRENTLY POINTE<i>D</i> AT 45.764043, 4.835659 (INTERPOL)");
           }else if(satelliteLocation==3){
-            logn("SATELLITE IS BR<i>OA</i>DCASTING MESSAGES. USE DOWNLOAD TO RETRIEVE.");
+            logn("SATELLITE IS BR<i>OA</i>DCASTING MESSAGES.");
             logn("CURRENTLY POINTE<i>D</i> AT ???, ??? (SIGMA)");
           }
           enabledCommands.push("download");
@@ -176,7 +182,7 @@
           logn("LOCATIONS SAVED:");
           logn("1. PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
           logn("2. INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
-          logn("3. SIGMA"+(satelliteLocation==3 ? "(CURRENT)" : ""));
+          if(satelliteLocation==3)logn("3. SIGMA (CURRENT)");
           logn("ENTER THE NUMBER OF THE LOCATION TO REDIRECT TO");
           
           var redirectFunction = function(result){
@@ -198,6 +204,7 @@
               waitForInput(redirectFunction);
             }
           }
+          enabledCommands.push("download");
           waitForInput(redirectFunction);
         },
         download:function(){
@@ -260,7 +267,7 @@
           if(e.keyCode == 13)
           {
             var text= $("#input").val().replace(/\n|\r\n|<br>/g,"");
-            logn(text);
+            logn(">"+text);
             $(this).val("");
             
             $("#input").unbind();
@@ -328,7 +335,7 @@
       }
       
       $(function(){
-        logn("Loading...");
+        logn("LOADING...");
         
         window.onbeforeunload = (function(){
           setCookie("SIGMA-commands",enabledCommands.join(","));
@@ -350,9 +357,8 @@
           satelliteLocation = satLocation;
         }
         
-        logn("SIGMA Console Activated.");
+        logn("SIGMA CONSOLE ACTIVATED");
         logn("454315 442315 13341415 13343232113314 113314 43153314 453531243325 3542344434133431");
-        logn("Enter your command:");
         
         waitForInput(func);
       })
