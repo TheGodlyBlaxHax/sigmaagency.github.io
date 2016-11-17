@@ -97,6 +97,10 @@
         }
       };
       
+      function sendCode(code){
+        
+      }
+      
       function addCommand(command){
         if(enabledCommands.indexOf(command)==-1){
           enabledCommands.push(command);
@@ -125,8 +129,10 @@
         },
         code:function(){
           logn("CONNECTING TO SERVER...");
+          //because they cheated
           if(name=="cody leonard"||name=="jason lu"){
             logn("<span class='red'>DIRTY CHEATERs CAN'T SUBMIT CODES</span>");
+            //at least i gave them enough mercy to allow them to add more commands
             waitForInput(func);
           }else{
             logn("USING NAME "+name);
@@ -245,6 +251,35 @@
           }
           waitForInput(func);
         },
+        upload:function(){
+          logn("SENT PAYLOAD. WAITING FOR RESPONSE...");
+          if(satelliteLocation==1){
+            logn("<span class='red'>ERROR: NO RECIEVER FOUND</span>");
+          }else if(satelliteLocation==2){
+            logn("01010100 01001000 01000101 00100000 01010000 01000001 01011001 01001100 01001111 01000001 01000100 00100000 01001001 01010011 00100000 01001001 01001110 00100000 01010000 01001100 01000001 01000011 01000101 00101110 00100000 01010101 01010011 01000101 00100000 01010100 01001000 01000101 00100000 01001000 01000001 01000011 01001011 00100000 01000011 01001111 01001101 01001101 01000001 01001110 01000100 00100000 01010100 01001111 00100000 01000101 01011000 01000101 01000011 01010101 01010100 01000101");
+            addCommand("hack");
+          }else if(satelliteLocation==3){
+            logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
+          }
+          waitForInput(func);
+        },
+        hack:function(){
+          if(satelliteLocation!=2){
+            logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
+          }else{
+            logn("PAYLOAD EXECUTION CODE SENT. STANDBY FOR A RESPONSE.");
+            logn("......................");
+            logn("RESPONSE RECIEVED.");
+            logn('FS PCAET UP IOPX. RCPE "ODVMPBE UBDAFYAE" YFD QKC DNEA DNSSCLCY');
+          }
+        },
+        payload:function(){
+          if(satelliteLocation!=2){
+            logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
+          }else{
+            logn("PAYLOAD IN PLACE. EXTRACTION IN PROGRESS. STANDBY FOR MORE INFORMATION.");
+          }        
+        },
         email:function(){
           if(satelliteLocation==2){
             var emailFunction = function(result){
@@ -256,9 +291,13 @@
                 logn("Dv ziv ivlkvmrmt hlnv xzhvh uiln z olmt grnv ztl. Dv szev srivw hlnv ivxifrg wvgvxgrevh zg Kozml Zxzwvnb gl rmevhgrtzgv gsvn. Gsvb droo hvmw ivjfvhgh uli verwvmxv, hl kivkziv blfi xzhv urovh.");
               }else if(result=="evidence"){
                 logn("SETSH DNEKG ROCVE EDDTV LSNFE NUNAE ROOHE IRAAI FTMHI NAWOH EMTYT MCDGX TNMFE CLERS NOOUE DCNEN AAOAO HILIT RUS");
+              }else if(result=="task"){
+                logn(".... ....  .. ...  .. ....  .... ...  /  .. ....  .... ...  /  . .  /  ... ..  . .....  .... ...  .... ...  . .  .. ..  . .....");
               }else{
                 logn("EMAIL NOT FOUND.");
               }
+              
+              addCommand("upload");
               waitForInput(func);
             }
             
@@ -392,7 +431,11 @@
         }
         
         logn("Σ CONSOLE ACTIVATED.");
-        logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
+        if(satelliteLocation==1){
+          logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
+        }else if(satelliteLocation==2){
+          logn('EDTEEALWT H UJC F"AKXRA H MI IHTESBETO TS"');
+        }
         
         var savedName = getCookie("SIGMA-name");
         if(savedName){
