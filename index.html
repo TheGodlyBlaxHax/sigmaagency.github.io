@@ -148,12 +148,13 @@
               logn("SENT CODE "+message);
               
               $.ajax(settings).done(function (response) {
+                logn("RECIEVED MESSAGE:");
                 var json = JSON.parse(response);
                 logn(json.message);
                 
                 if(json.message=="WRONG!"){
                   ++strikes;
-                  logn("You have "+strikes+" strike"+(strikes!=1 ? "s" : ""));
+                  logn("YOU HAVE "+strikes+" STRIKE"+(strikes!=1 ? "S" : ""));
                   if(strikes==1){
                     $("#console").toggleClass("red");
                     $("#input").toggleClass("red");
@@ -163,7 +164,7 @@
                     $("#console").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
                   }else if(strikes==3){
                     clearConsole();
-                    viewSigmaLogo("ACCESS DENIED");
+                    viewSigmaLogo("ACCESS DENIED. GOODBYE");
                   }
                 }else{
                   strikes = 0;
@@ -387,7 +388,7 @@
           satelliteLocation = satLocation;
         }
         
-        logn("SIGMA CONSOLE ACTIVATED");
+        logn("Σ CONSOLE ACTIVATED.");
         logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
         
         waitForInput(func);
