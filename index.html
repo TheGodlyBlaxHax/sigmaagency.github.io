@@ -86,6 +86,8 @@
       //SIGMA doesnt like cheaters. Dont read through this code.
       var strikes = 0;
       
+      var name;
+      
       var func = function(result){
         if(result&&result!=""&&enabledCommands.indexOf(result)>=0&&commands[result]){
           commands[result]();
@@ -123,9 +125,9 @@
         },
         code:function(){
           logn("CONNECTING TO SERVER...");
-          logn("INFORMATION REQUIRED.");
-          logn("ENTER <span class='red'>REAL</span> FIRST AND LAST NAME. POINTS WILL BE CREDITED TO WHOEVER YOU TYPE IN.");
-          waitForInput(function(name){
+          if(name=="cody leonard"||name=="jason lu"){
+            logn("<span class='red'>DIRTY CHEATERs CAN'T SUBMIT CODES</span>");
+          }else{
             logn("USING NAME "+name);
             logn("ENTER CODE TO SEND:");
             waitForInput(function(message){
@@ -177,7 +179,7 @@
               
               logn("WAITING FOR REQUEST...");
             });
-          });
+          }
         },
         interpol:function(){
           logn("<span class='red'>DO NOT MENTION THAT NAME</span>");
@@ -317,19 +319,19 @@
                @@@@@@@.............,:+@@@@@@@#                     
                 @@@@@@@                 ,@@@@#                     
                  @@@@@@@                  @@@#                     
-                 @@@@@@#                 @@#                     
+                 @@@@@@#                   @@#                     
                   :@@@@@@:                 @@#                     
-                   #@@@@@@                 @#                     
+                   #@@@@@@                 !@#                     
                     @@@@@@@                 @#                     
                      @@@@@@@                ;#                     
                       @@@@@@@               :                     
-                      @@@@@@#                                     
+                       @@@@@@#                                     
                        :@@@@@@:                                    
                         #@@@@@@                                    
                          @@@@@@@                                   
                           @@@@@@@                                  
                            @@@@@@@                                 
-                           @@@@@@+                                
+                            @@@@@@+                                
                             ;@@@@@@,                               
                              #@@@@@@                               
                               @@@@@@@                              
@@ -337,8 +339,8 @@
                                 @@@@                               
                                 :@@                                
                                .@@                                
-                              @@                                 
-                             @@.                                  
+                               @@                                 
+                              @@.                                  
                              @@:                                   
                             @@;                                    
                            @@+                                     
@@ -347,14 +349,14 @@
                         @@@                                        
                        @@@                                         
                       @@@                    @                     
-                     @@@                    @                     
+                     @@@                    @@                     
                     #@@                     #@                     
                    #@@                      @@                     
                   +@@                      +@@                     
                  ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
                 :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
                ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
               ++++++++++++++++++++++++++++++++      
 </pre>
@@ -391,7 +393,19 @@
         logn("Σ CONSOLE ACTIVATED.");
         logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
         
-        waitForInput(func);
+        var savedName = getCookie("SIGMA-name");
+        if(savedName){
+          name = savedName;
+          waitForInput(func);
+        }else{
+          logn("ENTER YOUR <span class='red'>REAL</span> FIRST AND LAST NAME. THIS WILL BE USED FOR POINTS.");
+          waitForInput(function(result){
+            name = result;
+            setCookie("SIGMA-name",result);
+            waitForInput(func);
+          });
+        }
+        
       })
     </script>
 </html>
