@@ -440,7 +440,7 @@
         }
         
         var savedName = getCookie("SIGMA-name");
-        if(savedName){
+        if(savedName&&enabledCommands.indexOf(savedName)<0){
           name = savedName;
           waitForInput(func);
         }else{
@@ -448,7 +448,7 @@
           
           var nameFunction = function(result){
             if(enabledCommands.indexOf(result)>=0){
-              logn("NAME IS NEEDED BEFORE COMMANDS CAN BE EXECUTED");
+              logn("<span class='red'>NAME</span> IS NEEDED BEFORE COMMANDS CAN BE EXECUTED");
               waitForInput(nameFunction);
             }else{
               name = result;
