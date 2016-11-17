@@ -30,6 +30,7 @@
             font-size:1em;
             display: flex;
             flex-direction: column; 
+            overflow-y: auto;
           }
           
           #input,#console{
@@ -122,8 +123,8 @@
         },
         code:function(){
           logn("CONNECTING TO SERVER...");
-          logn("INFORMATION REQUIRED:");
-          logn("ENTER <span class='red'>REAL</span> FIRST AND LAST NAME:");
+          logn("INFORMATION REQUIRED.");
+          logn("ENTER <span class='red'>REAL</span> FIRST AND LAST NAME. POINTS WILL BE CREDITED TO WHOEVER YOU TYPE IN.");
           waitForInput(function(name){
             logn("USING NAME "+name);
             logn("ENTER CODE TO SEND:");
@@ -223,7 +224,7 @@
               logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
               waitForInput(func);
             }else{
-              logn("NOT A VALID LOCATION");
+              logn("NOT A VALID LOCATION. MAKE SURE TO USE THE NUMBER OF THE LOCATION");
               waitForInput(redirectFunction);
             }
           }
@@ -281,6 +282,10 @@
       }
       
       function logn(message){
+        console.log($("#console").height()+" "+$(window).height());
+        if($("#console").height()>=$(window).height()){
+          clearConsole();
+        }
         log(message + "<br>");
       }
       
