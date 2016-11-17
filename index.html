@@ -445,11 +445,18 @@
           waitForInput(func);
         }else{
           logn("ENTER YOUR <span class='red'>REAL</span> FIRST AND LAST NAME. THIS WILL BE USED FOR POINTS.");
-          waitForInput(function(result){
-            name = result;
-            setCookie("SIGMA-name",result);
-            waitForInput(func);
-          });
+          
+          var nameFunction = function(result){
+            if(enabledCommands.indexOf(result)>=0){
+              logn("NAME IS NEEDED BEFORE COMMANDS CAN BE EXECUTED");
+              waitForInput(nameFunction);
+            }else{
+              name = result;
+              setCookie("SIGMA-name",result);
+              waitForInput(func);
+            }
+          }
+          waitForInput(nameFunction);
         }
         
       })
