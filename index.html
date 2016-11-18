@@ -439,14 +439,14 @@
         }
         
         var savedName = getCookie("SIGMA-name");
-        if(savedName&&enabledCommands.indexOf(savedName)<0){
+        if(savedName&&savedName!=""&&savedName.length>1&&enabledCommands.indexOf(savedName)<0){
           name = savedName;
           waitForInput(func);
         }else{
           logn("ENTER YOUR <span class='red'>REAL</span> FIRST AND LAST NAME. THIS WILL BE USED FOR POINTS.");
           
           var nameFunction = function(result){
-            if(enabledCommands.indexOf(result)>=0){
+            if(result&&result!=""&&result.length>1&&enabledCommands.indexOf(result)>=0){
               logn("<span class='red'>NAME</span> IS NEEDED BEFORE COMMANDS CAN BE EXECUTED");
               waitForInput(nameFunction);
             }else{
