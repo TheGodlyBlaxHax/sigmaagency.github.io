@@ -113,9 +113,9 @@
         };
         
         function addCommand(command){
-        if(enabledCommands.indexOf(command)==-1){
-            enabledCommands.push(command);
-        }
+          if(enabledCommands.indexOf(command)==-1){
+              enabledCommands.push(command);
+          }
         }
         
         var satelliteLocation = 1;
@@ -127,11 +127,7 @@
             waitForInput(func);
         },
         exit:function(){
-            if(satelliteLocation==1){
             logn("YOU CAN'T LEAVE WHILE THERE IS STILL <span class='red'>WORK</span> TO DO");
-            }else{
-            logn("JUST BECAUSE YOU ARE DONE WITH YOUR WORK DOES NOT MEAN YOU CAN LEAVE. <span class='red'>STAY PUT</span> AND WAIT FOR MORE ORDERS.");
-            }
             waitForInput(func);
         },
         sigma:function(){
@@ -144,66 +140,68 @@
             waitForInput(func);
         },
         code:function(){
-            logn("CONNECTING TO SERVER...");
+            logn("CONNECTING TO REMOTE SERVER...");
             //because they cheated. dont let the same fate happen to you.
-            if(name=="cody leonard"||name=="jason lu"){
-            logn("<span class='red'>DIRTY CHEATERS CAN'T SUBMIT CODES</span>");
-            //at least i gave them enough mercy to allow them to add more commands
-            waitForInput(func);
+            if(name==="cody leonard"||name==="jason lu"){
+              logn("<span class='red'>DIRTY CHEATERS CAN'T SUBMIT CODES</span>");
+              //at least i gave them enough mercy to allow them to add more commands
+              waitForInput(func);
             }else{
-            logn("USING NAME "+name);
-            logn("ENTER CODE TO SEND:");
-            waitForInput(function(message){
-                var settings = {
-                "async": true,
-                "crossDomain": true,
-                "dataType":"jsonp",
-                "url": "https://script.google.com/macros/s/AKfycbwUZGwN_7lKybnQb8bBLEc1vhMTsXWQUDu28vJSMAaDdVw8A832/exec",
-                "method": "POST",
-                "headers": {
-                    "cache-control": "no-cache",
-                },
-                "data": {
-                    "name":encodeURIComponent(name),
-                    "message":encodeURIComponent(message),
-                    "callback":"foo"
-                }
-                };
-            
-                logn("SENT CODE "+message);
-                
-                $.ajax(settings).done(function (response) {
-                logn("RECIEVED MESSAGE:");
-                var json = JSON.parse(response);
-                logn(json.message);
-                
-                if(json.message=="WRONG!"){
-                    ++strikes;
-                    logn("YOU HAVE "+strikes+" STRIKE"+(strikes!=1 ? "S" : ""));
-                    if(strikes==1){
-                    $("#console").toggleClass("red");
-                    $("#input").toggleClass("red");
-                    }else if(strikes==2){
-                    $("body").toggleClass("glitch");
-                    $("#console").toggleClass("glitch").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
-                    }else if(strikes==3){
-                    clearConsole();
-                    viewSigmaLogo("ACCESS DENIED. GOODBYE");
+              logn("USING AUTHENTICATION: "+name);
+              logn("ENTER CODE TO SEND:");
+              waitForInput(function(message){
+                  var settings = {
+                  "async": true,
+                  "crossDomain": true,
+                  "dataType":"jsonp",
+                  "url": "https://script.google.com/macros/s/AKfycbwUZGwN_7lKybnQb8bBLEc1vhMTsXWQUDu28vJSMAaDdVw8A832/exec",
+                  "method": "POST",
+                  "headers": {
+                      "cache-control": "no-cache",
+                  },
+                  "data": {
+                      "name":encodeURIComponent(name),
+                      "message":encodeURIComponent(message),
+                      "callback":"foo"
+                  }
+                  };
+              
+                  logn("SENT CODE: "+message);
+                  
+                  $.ajax(settings).done(function (response) {
+                    logn("DOWNLOADING MESSAGE...");
+                    var json = JSON.parse(response);
                     setTimeout(function(){
-                        window.open("","_self").close();
-                    }, 2000);
-                    }
-                }else{
-                    strikes = 0;
-                    
-                    addCommand(json.command);
-                }
-                
-                waitForInput(func);
-                });
-                
-                logn("WAITING FOR REQUEST...");
-            });
+                      logn("MESSAGE DOWNLOAD COMPLETE:");
+                      logn(json.message);
+                      if(json.message=="WRONG!"){
+                        ++strikes;
+                        logn("YOU HAVE "+strikes+" STRIKE"+(strikes!=1 ? "S" : ""));
+                        if(strikes==1){
+                          $("#console").toggleClass("red");
+                          $("#input").toggleClass("red");
+                        }else if(strikes==2){
+                          $("body").toggleClass("glitch");
+                          $("#console").toggleClass("glitch").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
+                        }else if(strikes==3){
+                          clearConsole();
+                          viewSigmaLogo("ACCESS DENIED. GOODBYE");
+                          setTimeout(function(){
+                              window.open("","_self").close();
+                          }, 2000);
+                        }
+                      }else{
+                          strikes = 0;
+                          
+                          addCommand(json.command);
+                      }
+                      
+                      waitForInput(func);
+                    });
+                  }, 1000);
+                  
+                  logn("WAITING FOR REQUEST...");
+              });
             }
         },
         interpol:function(){
@@ -211,112 +209,148 @@
             waitForInput(func);
         },
         uplink:function(){
-            logn("S<em>T</em>ARTING KE<em>Y</em>ED U<em>P</em>LINK...");
-            logn("O<em>E</em>NING SOCKETED CONNECTION...");
-            logn("<em>D</em>ETECTING SATELLITE...");
-            logn("C<em>O</em>NNECTING TO <em>W</em>ORLD SATELLITE...");
-            logn("COMMU<em>N</em>ICATIONS ESTAB<em>L</em>ISHED.");
             if(satelliteLocation==1){
-            logn("SATELLITE IS N<em>O</em>T BRO<em>A</em>DCASTING ANY MESSAGES");
-            logn("CURRENTLY POINTE<em>D</em> AT 33.022696, 96.719394 (PLANO ACADEMY HS)");
+              logn("S<em>T</em>ARTING KE<em>Y</em>ED U<em>P</em>LINK...");
+              logn("O<em>E</em>NING SOCKETED CONNECTION...");
+              logn("<em>D</em>ETECTING SATELLITE...");
+              logn("C<em>O</em>NNECTING TO <em>W</em>ORLD SATELLITE...");
+              logn("COMMU<em>N</em>ICATIONS ESTAB<em>L</em>ISHED.");
+              logn("SATELLITE IS N<em>O</em>T BRO<em>A</em>DCASTING ANY MESSAGES");
+              logn("CURRENTLY POINTE<em>D</em> AT 33N, 96W (PLANO ACADEMY HS)");
             }else if(satelliteLocation==2){
-            logn("SATELLITE IS BR<em>OA</em>DCASTING MESSAGES.");
-            logn("CURRENTLY POINTE<em>D</em> AT 45.764043, 4.835659 (INTERPOL)");
+              logn("SATELLITE UPLINK ALREADY ESTABLISHED.");
+              logn("SATELLITE IS BROADCASTING MESSAGES.");
+              logn("CURRENTLY POINTED AT 45N, 4E (INTERPOL)");
             }else if(satelliteLocation==3){
-            logn("SATELLITE IS BR<em>OA</em>DCASTING MESSAGES.");
-            logn("CURRENTLY POINTE<em>D</em> AT ???, ??? (SIGMA)");
+              logn("SATELLITE UPLINK ALREADY ESTABLISHED.");
+              logn("SATELLITE IS BROADCASTING MESSAGES.");
+              logn("CURRENTLY POINTED AT ???, ??? (SIGMA)");
             }
             addCommand("download");
             waitForInput(func);
         },
         redirect:function(){
+            clearConsole();
+            //credits go for this sweet map to Matthew Thomas (1998)
+            logn(`
+<pre>
+180 150W  120W  90W   60W   30W  000   30E   60E   90E   120E  150E 180
+|    |     |     |     |     |    |     |     |     |     |     |     |
++90N-+-----+-----+-----+-----+----+-----+-----+-----+-----+-----+-----+
+|          . _..::__:  ,-"-"._       |7       ,     _,.__             |
+|  _.___ _ _<_>\`!(._\`.\`-.    /        _._     \`_ ,_/  '  '-._.---.-.__|
+|.{     " " \`-==,',._\\{  \\  / {)     / _ ">_,-' \`                  - _|
++ \\_.:--.       \`._ )\`^-. "'      , [_/(                       __,/-' +
+|'"'     \\         "    _L         _,--'                )     /. (|   |
+|         |           ,'         _)2.\\\\._<>                _,' /  '   |
+|         \`.         /          [_/_'\` \`"(                <'}  )      |
++30N       \\    1.-. )          /   \`-'"..' \`:._          _)  '       +
+|   \`        \\  (  \`(          /         \`:\\  > \\  ,-^.  /' '         |
+|             \`._,   ""        |           \\\`'   \\|   ?_)  {\\         |
+|                \`=.---.       \`._._       ,'     "\`  |' ,- '.        |
++000               |    \`-._        |     /          \`:\`<_|h--._      +
+|                  (        >       .     | ,          \`=.__.\`-'\\     |
+|                   \`.     /        |     |{|              ,-.,\\     .|
+|                    |   ,'          \\   / \`'            ,"     \\     |
++30S                 |  /             |_'                |  __  /     +
+|                    | |                                 '-'  \`-'   \\.|
+|                    |/                                        "    / |
+|                    \\.                                            '  |
++60S                                                                  +
+|                     ,/           ______._.--._ _..---.---------._   |
+|    ,-----"-..?----_/ )      _,-'"             "                  (  |
+|.._(                  \`-----'                                      \`-|
++90S-+-----+-----+-----+-----+----+-----+-----+-----+-----+-----+-----+
+</pre>
+            `);
             logn("REDIRECTING SATELLITE...");
             logn("LOCATIONS SAVED:");
-            logn("1. PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
-            logn("2. INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
-            if(satelliteLocation==3)logn("3. SIGMA (CURRENT)");
+            logn("1. 33N, 96W: PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
+            logn("2. 45N, 4E: INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
+            if(satelliteLocation==3)logn("3. ???, ???: SIGMA (CURRENT)");
             logn("ENTER THE NUMBER OF THE LOCATION TO REDIRECT TO");
             
             var redirectFunction = function(result){
-            satelliteLocation=result;
-            if(result==2){
-                logn("REDIRECTED TO 45.764043, 4.835659 (INTERPOL)");
-                logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
-                waitForInput(func);
-            }else if(result==1){
-                logn("REDIRECTED TO 33.022696, 96.719394 (PLANO ACADEMY HS)");
-                logn("NO MESSAGES FOUND.");
-                waitForInput(func);
-            }else if(result==3){
-                logn("REDIRECTED TO ???, ??? (SIGMA)");
-                logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
-                waitForInput(func);
-            }else{
-                logn("NOT A VALID LOCATION. MAKE SURE TO USE THE NUMBER OF THE LOCATION");
-                waitForInput(redirectFunction);
-            }
+              satelliteLocation=result;
+              if(result==2){
+                  writeText("SATELLITE REDIRECTION COMPLETE.\nNEW TARGET: 45N, 4E (INTERPOL)\nMESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
+              }else if(result==1){
+                  writeText("SATELLITE REDIRECTION COMPLETE.\nNEW TARGET: 33N, 96W (PLANO ACADEMY HS)\nNO MESSAGES FOUND.");
+              }else if(result==3){
+                  writeText("SATELLITE REDIRECTION COMPLETE.\nNEW TARGET: ???, ??? (SIGMA)\nMESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
+              }else{
+                  logn("NOT A VALID LOCATION. MAKE SURE TO USE THE NUMBER OF THE LOCATION");
+                  waitForInput(redirectFunction);
+              }
             };
             addCommand("download");
             waitForInput(redirectFunction);
         },
         download:function(){
+            logn("CONNECTED TO UPLINK.");
+            logn("EXTRACTED DATA FROM TARGET.");
+            logn("DOWNLOADING...");
             if(satelliteLocation==1){
-            logn("XGA GSS CRGS YBXAAQG OJQ DSNG 'DRIVY FETXSOG'");
+              writeText("XGA GSS CRGS YBXAAQG OJQ DSNG 'DRIVY FETXSOG'");
             }else if(satelliteLocation==2){
-            logn("VIILI IVGIRVERMT NVHHZTVH, HKVXRZO KILGLXLO IVJFRIVW. HVMW 'vnzro kilglxlo' ERZ GSV XLWV XLNNZMW");
+              writeText("VIILI IVGIRVERMT NVHHZTVH, HKVXRZO KILGLXLO IVJFRIVW. HVMW 'vnzro kilglxlo' ERZ GSV XLWV XLNNZMW");
             }else if(satelliteLocation==3){
-            logn("LEGA TQY. YNU WEJJ LAVAQ BELM WDAQA RECKS ER.");
+              writeText("LEGA TQY. YNU WEJJ LAVAQ BELM WDAQA RECKS ER.");
             }
-            waitForInput(func);
         },
         upload:function(){
-            logn("SENT PAYLOAD. WAITING FOR RESPONSE...");
+           logn("SENT PAYLOAD. WAITING FOR RESPONSE...");
             if(satelliteLocation==1){
-            logn("<span class='red'>ERROR: NO RECIEVER FOUND</span>");
+              logn("<span class='red'>ERROR: NO RECEIVER FOUND</span>");
             }else if(satelliteLocation==2){
-            logn("01010100 01001000 01000101 00100000 01010000 01000001 01011001 01001100 01001111 01000001 01000100 00100000 01001001 01010011 00100000 01001001 01001110 00100000 01010000 01001100 01000001 01000011 01000101 00101110 00100000 01010101 01010011 01000101 00100000 01010100 01001000 01000101 00100000 01001000 01000001 01000011 01001011 00100000 01000011 01001111 01001101 01001101 01000001 01001110 01000100 00100000 01010100 01001111 00100000 01000101 01011000 01000101 01000011 01010101 01010100 01000101");
-            addCommand("hack");
+              writeText("..............................", function(){
+                addCommand("hack");
+                logn("ENCRYPTED TRANSMISSION RECEIVED FROM UNKNOWN SOURCE:");
+                logn("01010100 01001000 01000101 00100000 01010000 01000001 01011001 01001100 01001111 01000001 01000100 00100000 01001001 01010011 00100000 01001001 01001110 00100000 01010000 01001100 01000001 01000011 01000101 00101110 00100000 01010101 01010011 01000101 00100000 01010100 01001000 01000101 00100000 01001000 01000001 01000011 01001011 00100000 01000011 01001111 01001101 01001101 01000001 01001110 01000100 00100000 01010100 01001111 00100000 01000101 01011000 01000101 01000011 01010101 01010100 01000101");
+              });
             }else if(satelliteLocation==3){
-            logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
+              logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
             }
             waitForInput(func);
         },
         hack:function(){
             if(satelliteLocation!=2){
-            logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
+              logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
             }else{
-            logn("PAYLOAD EXECUTION CODE SENT. STANDBY FOR A RESPONSE.");
-            logn("......................");
-            logn("RESPONSE RECIEVED.");
-            logn('FS PCAET UP IOPX. RCPE "ODVMPBE UBDAFYAE" YFD QKC DNEA DNSSCLCY');
+              writeText("PAYLOAD EXECUTION CODE SENT. STANDBY FOR A RESPONSE.\n......................\nHACK SUCCESSFUL.\nENCRYPTED TRANSMISSION RECEIVED FROM UNKNOWN SOURCE:\nFS PCAET UP IOPX. RCPE \"ODVMPBE UBDAFYAE\" YFD QKC DNEA DNSSCLCY");
             }
-            waitForInput(func);
         },
         payload:function(){
             if(satelliteLocation!=2){
-            logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
+              logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
             }else{
-            logn("PAYLOAD IN PLACE. EXTRACTION IN PROGRESS. STANDBY FOR MORE INFORMATION.");
-            sleep(5000);
-            logn("RESPONSE RECIEVED: <b>5</b>0 12 247 113 223 50 129 22<i>3</i> 12 1<i>2</i>4 103 108 50 223 247 99 12 <i>3</i>07 223 185 129 233 223 50 21 103 223 185 99 108 12 247 223 288 129 102 103");
-            //i thought i said no cheating!
-            //heRe iS a prime plAce to seek the key, but you will come up e mpty haNde d ...
+              setInputEnabled(false);
+              writeText("ARMING PAYLOAD...\n..............................................................\nPAYLOAD ARMED.", function(){
+                setTimeout(function(){
+                  setInputEnabled(true);
+                  logn("ENCRYPTED TRANSMISSION RECEIVED FROM UNKNOWN SOURCE:<br><b>5</b>0 12 247 113 223 50 129 22<i>3</i> 12 1<i>2</i>4 103 108 50 223 247 99 12 <i>3</i>07 223 185 129 233 223 50 21 103 223 185 99 108 12 247 223 288 129 102 103");
+                }, 2000);
+              });
+              
+              //i thought i said no cheating!
+              //heRe iS a prime plAce to seek the key, but you will come up e mpty haNde d ...
             }
             waitForInput(func);
         },
         deploy:function(){
             if(satelliteLocation == 3){
-                logn("<span class='red'>I AM SORRY, BUT I CAN NOT LET YOU DO THAT. DO NOT ATTEMPT TO DESTROY YOUR BOSS.</span>");
+                logn("<span class='red'>I AM SORRY, BUT I CAN NOT LET YOU DO THAT. DO NOT ATTEMPT TO DESTROY US.</span>");
                 waitForInput(func);
             }else if(satelliteLocation!=2){
-                logn("<span class='red'>ERROR: NOTHING FOUND TO DEPLOY AT THIS LOCATION. REDIRECT SATELLITE TO VALID COORDINATES.</span>");
+                logn("<span class='red'>ERROR: NO PAYLOAD FOUND TO DEPLOY AT THIS LOCATION. REDIRECT SATELLITE TO VALID COORDINATES.</span>");
                 waitForInput(func);
             }else{
                 setInputEnabled(false);
                 document.title = "NUCLEAR LAUNCH DETECTED";
                 clearConsole();
                 $("body").toggleClass("centered");
-                writeText("SHALL WE PLAY A GAME?\nHOW ABOUT GLOBAL THERMONUCLEAR WAR?", function(){
+                logn("<br><br><br><br><br>");
+                writeText("CONNECTING TO SATELLITE UPLINK...\n\nPREPARING PAYLOAD DEPLOYMENT PROCEDURE...\n\n\nTARGET: 45N, 4E (INTERPOL)\n\nSTARTING LAUNCH SEQUENCE...\nSENSOR STATUS CHECKS: 100% COMPLETE\nTANK PRESSURIZATION: 100% COMPLETE\nROCKET FUELING: 100% COMPLETE\nGPS COORDINATE DOWNLOAD: 100% COMPLETE\n\nSTANDBY FOR LAUNCH.\n\n\nLAUNCHING IN 3...\n2...\n1...\n\n\n\nLAUNCH COMPLETE.\n\n", function(){
                     setTimeout(function(){
                         clearConsole();
                         logn(`
@@ -324,16 +358,16 @@
                                 ____                      
                         __,-~~/~    \`---.                 
                     _/_,---(      ,    )                
-                __ /        <    /   )  \___            
+                __ /        <    /   )  \\___            
                  ====------------------===;;;==           
-                     \/  ~"~"~"~"~"~\~"~)~",1/            
-                     (_ (   \  (     >    \)              
-                    \_( _ <         >_>'                
+                     \\/  ~"~"~"~"~"~\\~"~)~",1/            
+                     (_ (   \\  (     >    \\)              
+                    \\_( _ <         >_>'                
                          ~ \`-i' ::>|--"                   
-                             I;|.|.|                      
-                            <|i::|i|>                     
-                             |[::|.|                      
-                            ||: |                       
+       ____   ^             I;|.|.|                      
+       |  |  /__\\          <|i::|i|>          ^           
+  ____  |  |  |  |           |[::|.|    / \\  /__\\  ____     
+ |  |  |  |  |  |            ||: |     | |  |  |  |  |    
 _________________________INTERPOL HQ___________________ 
                                                         
                         </pre>
@@ -386,29 +420,30 @@ _________________________INTERPOL HQ___________________
                               waitForInput(hearResponse);
                           });
                         }, 3000);
-                    }, 3000);
+                    }, 4000);
                 });
             }
         },
         email:function(){
             if(satelliteLocation==2){
                 var emailFunction = function(result){
+                    logn("CONNECTED TO UPLINK, DOWNLOADING RESPONSE...");
                     if(result=="kappa"){
-                        logn("VGhlcmUgaXMgYSBncm91cCBjYWxsZWQga2FwcGEgd2hvIHNlZW1zIHRvIGJlIGFzc29jaWF0ZWQgd2l0aCBTaWdtYSBzb21laG93LiBUaGVzZSBzcGllcyBwbGFudCBtZXNzYWdlcyB0aHJvdWdob3V0IFBsYW5vIEFjYWRlbXkuIEkgaGF2ZSBpbnN0cnVjdGVkIG91ciBhZ2VudHMgdG8gZmluZCBhbmQgZGVzdHJveSB0aGlzIHRocmVhdC4=");
+                        writeText("VGhlcmUgaXMgYSBncm91cCBjYWxsZWQga2FwcGEgd2hvIHNlZW1zIHRvIGJlIGFzc29jaWF0ZWQgd2l0aCBTaWdtYSBzb21laG93LiBUaGVzZSBzcGllcyBwbGFudCBtZXNzYWdlcyB0aHJvdWdob3V0IFBsYW5vIEFjYWRlbXkuIEkgaGF2ZSBpbnN0cnVjdGVkIG91ciBhZ2VudHMgdG8gZmluZCBhbmQgZGVzdHJveSB0aGlzIHRocmVhdC4=");
                     }else if(result=="sigma"){
-                        logn("Iieoaaoizlgeqggqmcxhrxfdkymyqgnnhzmyemdzyslniyiwrvkihrkuogiqemgaoodbphykiytpzltduuemoizlmq");
+                        writeText("Iieoaaoizlgeqggqmcxhrxfdkymyqgnnhzmyemdzyslniyiwrvkihrkuogiqemgaoodbphykiytpzltduuemoizlmq");
                     }else if(result=="cold case"){
-                        logn("Dv ziv ivlkvmrmt hlnv xzhvh uiln z olmt grnv ztl. Dv szev srivw hlnv ivxifrg wvgvxgrevh zg Kozml Zxzwvnb gl rmevhgrtzgv gsvn. Gsvb droo hvmw ivjfvhgh uli verwvmxv, hl kivkziv blfi xzhv urovh.");
+                        writeText("Dv ziv ivlkvmrmt hlnv xzhvh uiln z olmt grnv ztl. Dv szev srivw hlnv ivxifrg wvgvxgrevh zg Kozml Zxzwvnb gl rmevhgrtzgv gsvn. Gsvb droo hvmw ivjfvhgh uli verwvmxv, hl kivkziv blfi xzhv urovh.");
                     }else if(result=="evidence"){
-                        logn("SETSH DNEKG ROCVE EDDTV LSNFE NUNAE ROOHE IRAAI FTMHI NAWOH EMTYT MCDGX TNMFE CLERS NOOUE DCNEN AAOAO HILIT RUS");
+                        writeText("SETSH DNEKG ROCVE EDDTV LSNFE NUNAE ROOHE IRAAI FTMHI NAWOH EMTYT MCDGX TNMFE CLERS NOOUE DCNEN AAOAO HILIT RUS");
                     }else if(result=="task"){
-                        logn(".... .....  .... ...  . .....  /  .... ....  .. ...  . .....  /  .... .....  ... .....  ... .  ... ....  . .  . ....  /  . ...  ... ....  ... ..  ... ..  . .  ... ...  . ....  ");
+                        addCommand("upload");
+                        writeText(".... .....  .... ...  . .....  /  .... ....  .. ...  . .....  /  .... .....  ... .....  ... .  ... ....  . .  . ....  /  . ...  ... ....  ... ..  ... ..  . .  ... ...  . ....  ");
+                    }else if(result=="hillary"){
+                        writeText("ERROR: ALL 10,000 EMAILS WITH \"HILLARY\" IN SUBJECT LINE SEEM TO BE CORRUPTED. PERHAPS THEY HAVE BEEN WIPED BY A CLOTH?");
                     }else{
-                        logn("EMAIL NOT FOUND.");
+                        writeText("EMAIL NOT FOUND.");
                     }
-                    
-                    addCommand("upload");
-                    waitForInput(func);
                 };
                 
                 logn("EMAILS FOUND. PLEASE ENTER THE SUBJECT OF AN EMAIL TO READ.");
@@ -462,16 +497,29 @@ _________________________INTERPOL HQ___________________
         }
         
         function writeText(output, complete){
+            if(complete === undefined){
+              setInputEnabled(false);
+              complete = function(){
+                setInputEnabled(true);
+                waitForInput(func);
+              }
+            }
+            
             var printLetter = function(){
                 if(output.length >= 1){
-                    log(output[0]);
-                    if(output[0] === '\n'){
+                    var character = output[0];
+                    output = output.substr(1);
+                    
+                    log(character);
+                    
+                    if(character === '\n'){
                         logn("");
                         setTimeout(printLetter, 2000);
+                    }else if(character !== ' '){
+                        setTimeout(printLetter, 70);
                     }else{
-                        setTimeout(printLetter, 75);
+                        printLetter();
                     }
-                    output = output.substr(1);
                 }else{
                     logn("");
                     complete();
@@ -539,31 +587,31 @@ _________________________INTERPOL HQ___________________
         
         
         function setCookie(cname, cvalue, exdays) {
-        	var expires = "";
-        	if(!exdays)exdays = 365;
-        	
-        	var d = new Date();
-        	d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        	expires = "expires="+d.toGMTString();
-        	document.cookie = cname + "=" + cvalue + "; " + expires;
+          var expires = "";
+          if(!exdays)exdays = 365;
+          
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          expires = "expires="+d.toGMTString();
+          document.cookie = cname + "=" + cvalue + "; " + expires;
         }
         
         function getCookie(cname) {
-        	if(!document&&!document.cookie){
-        		return "";
-        	}
-        	var name = cname + "=";
-        	var ca = document.cookie.split(';');
-        	for(var i = 0; i < ca.length; i++) {
-        		var c = ca[i];
-        		while (c.charAt(0) == ' ') {
-        			c = c.substring(1);
-        		}
-        		if (c.indexOf(name) == 0) {
-        			return c.substring(name.length, c.length);
-        		}
-        	}
-        	return "";
+          if(!document&&!document.cookie){
+            return "";
+          }
+          var name = cname + "=";
+          var ca = document.cookie.split(';');
+          for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+            }
+          }
+          return "";
         }
 
         
