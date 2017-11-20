@@ -16,11 +16,11 @@
         <link href="favicon.ico"rel="shortcut icon"type="image/x-icon">
         
         <style>
-          html,body{
+            html,body{
             height:100%;
-          }
+            }
         
-          body{
+            body{
             background-color:black;
             color:green;
             font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
@@ -28,18 +28,18 @@
             display: flex;
             flex-direction: column; 
             overflow-y: auto;
-          }
-          
-          #input,#console{
+            }
+            
+            #input,#console{
             display:inline-block;
             vertical-align:top;
             outline:none;
             border:none;
             background-color: rgba(0,0,0,0);
             line-height:1em;
-          }
-          
-          #input,textarea{
+            }
+            
+            #input,textarea{
             height:100%;
             width:99%;
             color:green;
@@ -50,414 +50,544 @@
             margin:0;
             padding:0;
             top:0;
-          }
-          
-          em{
+            }
+            
+            em{
             font-weight:bold;
             font-style:italic;
-          }
-          
-          .red{
+            }
+            
+            .red{
             color:red !important;
-          }
-          
-          .glitch{font-family:Courier;animation:glitch1 3.5s infinite;position:relative;}.glitch::after,.glitch::before{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}.glitch::after{color:#0F0;animation:glitch2 1.5s infinite alternate-reverse}.glitch::before{color:#f16f6f;animation:glitch3 2.5s infinite alternate-reverse}@keyframes glitch1{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:1}7%{transform:skew(-.5deg,-.9deg);opacity:.75}30%{transform:skew(.8deg,-.1deg);opacity:.75}55%{transform:skew(-1deg,.2deg);opacity:.75}75%{transform:skew(.4deg,1deg);opacity:.75}}@keyframes glitch2{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:.25}7%{transform:translate(-2px,-3px);opacity:.5}30%{transform:translate(-5px,-2px);opacity:.5}55%{transform:translate(-5px,-1px);opacity:.5}75%{transform:translate(-2px,-6px);opacity:.5}}@keyframes glitch3{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:.25}7%{transform:translate(2px,3px);opacity:.5}30%{transform:translate(5px,2px);opacity:.5}55%{transform:translate(5px,1px);opacity:.5}75%{transform:translate(2px,6px);opacity:.5}}
+            }
+            
+            .glitch{font-family:Courier;animation:glitch1 3.5s infinite;position:relative;}.glitch::after,.glitch::before{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}.glitch::after{color:#0F0;animation:glitch2 1.5s infinite alternate-reverse}.glitch::before{color:#f16f6f;animation:glitch3 2.5s infinite alternate-reverse}@keyframes glitch1{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:1}7%{transform:skew(-.5deg,-.9deg);opacity:.75}30%{transform:skew(.8deg,-.1deg);opacity:.75}55%{transform:skew(-1deg,.2deg);opacity:.75}75%{transform:skew(.4deg,1deg);opacity:.75}}@keyframes glitch2{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:.25}7%{transform:translate(-2px,-3px);opacity:.5}30%{transform:translate(-5px,-2px);opacity:.5}55%{transform:translate(-5px,-1px);opacity:.5}75%{transform:translate(-2px,-6px);opacity:.5}}@keyframes glitch3{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:.25}7%{transform:translate(2px,3px);opacity:.5}30%{transform:translate(5px,2px);opacity:.5}55%{transform:translate(5px,1px);opacity:.5}75%{transform:translate(2px,6px);opacity:.5}}
         </style>
     </head>
     <body>
-      <code id="console"></code><textarea id="input"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <code id="console"></code><textarea id="input"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
     </body>
     <!--Scripts are loaded in here, at the end, to make it fastest-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"type="text/javascript"></script>
     <script src="https://liavt.github.io/Scheduler/src/client/js/Scripts.js"type="text/javascript"></script>
     <script type="text/javascript">
-      if(!$){
+        if(!$){
         console.error("Resources failed to load.");
         document.write("<h1 id='message'>Resources failed to load. Please reload the page.</h1>");
-      }
-      if (window.location.protocol !== 'https:') {
+        }
+        if (window.location.protocol !== 'https:') {
         document.write("<h1 id='message'>Not using https. Please reload the page using https</h1>");
-      }
+        }
     </script>
      <script>
-      //SIGMA doesnt like cheaters. Dont read through this code.
-      var strikes = 0;
-      
-      var name;
-      
-      var func = function(result){
-        if(result&&result!=""&&enabledCommands.indexOf(result)>=0&&commands[result]){
-          commands[result]();
-        }else{
-          logn("Invalid command");
-          waitForInput(func);
-        }
-      };
-      
-      function addCommand(command){
+        /* globals $, setCookie, getCookie */
+     
+        //SIGMA doesnt like cheaters. Dont read through this code.
+        var strikes = 0;
+        
+        var name;
+        
+        var func = function(result){
+          if(result&&result!=""&&enabledCommands.indexOf(result)>=0&&commands[result]){
+              commands[result]();
+          }else{
+              logn("Invalid command");
+              waitForInput(func);
+          }
+        };
+        
+        function addCommand(command){
         if(enabledCommands.indexOf(command)==-1){
-          enabledCommands.push(command);
+            enabledCommands.push(command);
         }
-      }
-      
-      var satelliteLocation = 1;
-      
-      var enabledCommands;
-      var commands = {
+        }
+        
+        var satelliteLocation = 1;
+        
+        var enabledCommands;
+        var commands = {
         help:function(){
-          logn("AGENTS SHOULDN'T NEED <span class='red'>HELP</span>");
-          waitForInput(func);
+            logn("AGENTS SHOULDN'T NEED <span class='red'>HELP</span>");
+            waitForInput(func);
         },
         exit:function(){
-          if(satelliteLocation==1){
+            if(satelliteLocation==1){
             logn("YOU CAN'T LEAVE WHILE THERE IS STILL <span class='red'>WORK</span> TO DO");
-          }else{
+            }else{
             logn("JUST BECAUSE YOU ARE DONE WITH YOUR WORK DOES NOT MEAN YOU CAN LEAVE. <span class='red'>STAY PUT</span> AND WAIT FOR MORE ORDERS.");
-          }
-          waitForInput(func);
+            }
+            waitForInput(func);
         },
         sigma:function(){
-          viewSigmaLogo("SIGMA");
-          waitForInput(func);
+            viewSigmaLogo("SIGMA");
+            waitForInput(func);
         },
         clear:function(){
-          clearConsole();
-          logn("CLEARED CONSOLE.");
-          waitForInput(func);
+            clearConsole();
+            logn("CLEARED CONSOLE.");
+            waitForInput(func);
         },
         code:function(){
-          logn("CONNECTING TO SERVER...");
-          //because they cheated
-          if(name=="cody leonard"||name=="jason lu"){
-            logn("<span class='red'>DIRTY CHEATERs CAN'T SUBMIT CODES</span>");
+            logn("CONNECTING TO SERVER...");
+            //because they cheated. dont let the same fate happen to you.
+            if(name=="cody leonard"||name=="jason lu"){
+            logn("<span class='red'>DIRTY CHEATERS CAN'T SUBMIT CODES</span>");
             //at least i gave them enough mercy to allow them to add more commands
             waitForInput(func);
-          }else{
+            }else{
             logn("USING NAME "+name);
             logn("ENTER CODE TO SEND:");
             waitForInput(function(message){
-              var settings = {
+                var settings = {
                 "async": true,
                 "crossDomain": true,
                 "dataType":"jsonp",
                 "url": "https://script.google.com/macros/s/AKfycbwUZGwN_7lKybnQb8bBLEc1vhMTsXWQUDu28vJSMAaDdVw8A832/exec",
                 "method": "POST",
                 "headers": {
-                  "cache-control": "no-cache",
+                    "cache-control": "no-cache",
                 },
                 "data": {
                     "name":encodeURIComponent(name),
                     "message":encodeURIComponent(message),
                     "callback":"foo"
                 }
-              };
+                };
             
-              logn("SENT CODE "+message);
-              
-              $.ajax(settings).done(function (response) {
+                logn("SENT CODE "+message);
+                
+                $.ajax(settings).done(function (response) {
                 logn("RECIEVED MESSAGE:");
                 var json = JSON.parse(response);
                 logn(json.message);
                 
                 if(json.message=="WRONG!"){
-                  ++strikes;
-                  logn("YOU HAVE "+strikes+" STRIKE"+(strikes!=1 ? "S" : ""));
-                  if(strikes==1){
+                    ++strikes;
+                    logn("YOU HAVE "+strikes+" STRIKE"+(strikes!=1 ? "S" : ""));
+                    if(strikes==1){
                     $("#console").toggleClass("red");
                     $("#input").toggleClass("red");
-                  }else if(strikes==2){
+                    }else if(strikes==2){
                     $("body").toggleClass("glitch");
-                    $("#console").toggleClass("glitch");
-                    $("#console").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
-                  }else if(strikes==3){
+                    $("#console").toggleClass("glitch").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
+                    }else if(strikes==3){
                     clearConsole();
                     viewSigmaLogo("ACCESS DENIED. GOODBYE");
-                  }
+                    setTimeout(function(){
+                        window.open("","_self").close();
+                    }, 2000);
+                    }
                 }else{
-                  strikes = 0;
-                  
-                  addCommand(json.command);
+                    strikes = 0;
+                    
+                    addCommand(json.command);
                 }
                 
                 waitForInput(func);
-              });
-              
-              logn("WAITING FOR REQUEST...");
+                });
+                
+                logn("WAITING FOR REQUEST...");
             });
-          }
+            }
         },
         interpol:function(){
-          logn("<span class='red'>DO NOT MENTION THAT NAME</span>");
-          waitForInput(func);
+            logn("<span class='red'>DO NOT MENTION THAT NAME</span>");
+            waitForInput(func);
         },
         uplink:function(){
-          logn("S<em>T</em>ARTING KE<em>Y</em>ED U<em>P</em>LINK...");
-          logn("O<em>E</em>NING SOCKETED CONNECTION...");
-          logn("<em>D</em>ETECTING SATELLITE...");
-          logn("C<em>O</em>NNECTING TO <em>W</em>ORLD SATELLITE...");
-          logn("COMMU<em>N</em>ICATIONS ESTAB<em>L</em>ISHED.");
-          if(satelliteLocation==1){
+            logn("S<em>T</em>ARTING KE<em>Y</em>ED U<em>P</em>LINK...");
+            logn("O<em>E</em>NING SOCKETED CONNECTION...");
+            logn("<em>D</em>ETECTING SATELLITE...");
+            logn("C<em>O</em>NNECTING TO <em>W</em>ORLD SATELLITE...");
+            logn("COMMU<em>N</em>ICATIONS ESTAB<em>L</em>ISHED.");
+            if(satelliteLocation==1){
             logn("SATELLITE IS N<em>O</em>T BRO<em>A</em>DCASTING ANY MESSAGES");
             logn("CURRENTLY POINTE<em>D</em> AT 33.022696, 96.719394 (PLANO ACADEMY HS)");
-          }else if(satelliteLocation==2){
+            }else if(satelliteLocation==2){
             logn("SATELLITE IS BR<em>OA</em>DCASTING MESSAGES.");
             logn("CURRENTLY POINTE<em>D</em> AT 45.764043, 4.835659 (INTERPOL)");
-          }else if(satelliteLocation==3){
+            }else if(satelliteLocation==3){
             logn("SATELLITE IS BR<em>OA</em>DCASTING MESSAGES.");
             logn("CURRENTLY POINTE<em>D</em> AT ???, ??? (SIGMA)");
-          }
-          addCommand("download");
-          waitForInput(func);
+            }
+            addCommand("download");
+            waitForInput(func);
         },
         redirect:function(){
-          logn("REDIRECTING SATELLITE...");
-          logn("LOCATIONS SAVED:");
-          logn("1. PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
-          logn("2. INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
-          if(satelliteLocation==3)logn("3. SIGMA (CURRENT)");
-          logn("ENTER THE NUMBER OF THE LOCATION TO REDIRECT TO");
-          
-          var redirectFunction = function(result){
+            logn("REDIRECTING SATELLITE...");
+            logn("LOCATIONS SAVED:");
+            logn("1. PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
+            logn("2. INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
+            if(satelliteLocation==3)logn("3. SIGMA (CURRENT)");
+            logn("ENTER THE NUMBER OF THE LOCATION TO REDIRECT TO");
+            
+            var redirectFunction = function(result){
             satelliteLocation=result;
             if(result==2){
-              logn("REDIRECTED TO 45.764043, 4.835659 (INTERPOL)");
-              logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
-              waitForInput(func);
+                logn("REDIRECTED TO 45.764043, 4.835659 (INTERPOL)");
+                logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
+                waitForInput(func);
             }else if(result==1){
-              logn("REDIRECTED TO 33.022696, 96.719394 (PLANO ACADEMY HS)");
-              logn("NO MESSAGES FOUND.");
-              waitForInput(func);
+                logn("REDIRECTED TO 33.022696, 96.719394 (PLANO ACADEMY HS)");
+                logn("NO MESSAGES FOUND.");
+                waitForInput(func);
             }else if(result==3){
-              logn("REDIRECTED TO ???, ??? (SIGMA)");
-              logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
-              waitForInput(func);
+                logn("REDIRECTED TO ???, ??? (SIGMA)");
+                logn("MESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
+                waitForInput(func);
             }else{
-              logn("NOT A VALID LOCATION. MAKE SURE TO USE THE NUMBER OF THE LOCATION");
-              waitForInput(redirectFunction);
+                logn("NOT A VALID LOCATION. MAKE SURE TO USE THE NUMBER OF THE LOCATION");
+                waitForInput(redirectFunction);
             }
-          }
-          addCommand("download");
-          waitForInput(redirectFunction);
+            };
+            addCommand("download");
+            waitForInput(redirectFunction);
         },
         download:function(){
-          if(satelliteLocation==1){
+            if(satelliteLocation==1){
             logn("XGA GSS CRGS YBXAAQG OJQ DSNG 'DRIVY FETXSOG'");
-          }else if(satelliteLocation==2){
+            }else if(satelliteLocation==2){
             logn("VIILI IVGIRVERMT NVHHZTVH, HKVXRZO KILGLXLO IVJFRIVW. HVMW 'vnzro kilglxlo' ERZ GSV XLWV XLNNZMW");
-          }else if(satelliteLocation==3){
+            }else if(satelliteLocation==3){
             logn("LEGA TQY. YNU WEJJ LAVAQ BELM WDAQA RECKS ER.");
-          }
-          waitForInput(func);
+            }
+            waitForInput(func);
         },
         upload:function(){
-          logn("SENT PAYLOAD. WAITING FOR RESPONSE...");
-          if(satelliteLocation==1){
+            logn("SENT PAYLOAD. WAITING FOR RESPONSE...");
+            if(satelliteLocation==1){
             logn("<span class='red'>ERROR: NO RECIEVER FOUND</span>");
-          }else if(satelliteLocation==2){
+            }else if(satelliteLocation==2){
             logn("01010100 01001000 01000101 00100000 01010000 01000001 01011001 01001100 01001111 01000001 01000100 00100000 01001001 01010011 00100000 01001001 01001110 00100000 01010000 01001100 01000001 01000011 01000101 00101110 00100000 01010101 01010011 01000101 00100000 01010100 01001000 01000101 00100000 01001000 01000001 01000011 01001011 00100000 01000011 01001111 01001101 01001101 01000001 01001110 01000100 00100000 01010100 01001111 00100000 01000101 01011000 01000101 01000011 01010101 01010100 01000101");
             addCommand("hack");
-          }else if(satelliteLocation==3){
+            }else if(satelliteLocation==3){
             logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
-          }
-          waitForInput(func);
+            }
+            waitForInput(func);
         },
         hack:function(){
-          if(satelliteLocation!=2){
+            if(satelliteLocation!=2){
             logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
-          }else{
+            }else{
             logn("PAYLOAD EXECUTION CODE SENT. STANDBY FOR A RESPONSE.");
             logn("......................");
             logn("RESPONSE RECIEVED.");
             logn('FS PCAET UP IOPX. RCPE "ODVMPBE UBDAFYAE" YFD QKC DNEA DNSSCLCY');
-          }
-          waitForInput(func);
+            }
+            waitForInput(func);
         },
         payload:function(){
-          if(satelliteLocation!=2){
+            if(satelliteLocation!=2){
             logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
-          }else{
+            }else{
             logn("PAYLOAD IN PLACE. EXTRACTION IN PROGRESS. STANDBY FOR MORE INFORMATION.");
-          }
-          waitForInput(func);
+            sleep(5000);
+            logn("RESPONSE RECIEVED: <b>5</b>0 12 247 113 223 50 129 22<i>3</i> 12 1<i>2</i>4 103 108 50 223 247 99 12 <i>3</i>07 223 185 129 233 223 50 21 103 223 185 99 108 12 247 223 288 129 102 103");
+            //i thought i said no cheating!
+            //heRe iS a prime plAce to seek the key, but you will come up e mpty haNde d ...
+            }
+            waitForInput(func);
+        },
+        deploy:function(){
+            if(satelliteLocation == 3){
+                logn("<span class='red'>I AM SORRY, BUT I CAN NOT LET YOU DO THAT. DO NOT ATTEMPT TO DESTROY YOUR BOSS.</span>");
+                waitForInput(func);
+            }else if(satelliteLocation!=2){
+                logn("<span class='red'>ERROR: NOTHING FOUND TO DEPLOY AT THIS LOCATION. REDIRECT SATELLITE TO VALID COORDINATES.</span>");
+                waitForInput(func);
+            }else{
+                setInputEnabled(false);
+                document.title = "CONGRATULATIONS!";
+                clearConsole();
+                writeText("SHALL WE PLAY A GAME?\nHOW ABOUT GLOBAL THERMONUCLEAR WAR?", function(){
+                    setTimeout(function(){
+                        clearConsole();
+                        logn(`
+                        <pre id='explosion'>
+                                            ____                      
+                                    __,-~~/~    \`---.                 
+                                _/_,---(      ,    )                
+                            __ /        <    /   )  \___            
+                             ====------------------===;;;==           
+                                 \/  ~"~"~"~"~"~\~"~)~",1/            
+                                 (_ (   \  (     >    \)              
+                                \_( _ <         >_>'                
+                                     ~ \`-i' ::>|--"                   
+                                         I;|.|.|                      
+                                        <|i::|i|>                     
+                                         |[::|.|                      
+                                        ||: |                       
+            _________________________INTERPOL HQ___________________ 
+                                                                    
+                        </pre>
+                        <br>
+                        <br>
+                        `);
+                        
+                        var isRed = false;
+                        var $explosion = $("#explosion");
+                        setInterval(function(){
+                            isRed = !isRed;
+                            $explosion.css("color", isRed ? "red" : "inherit");
+                        }, 750);
+                        
+                        var output = "INCOMING TRANSMISSION FROM Σ HQ:\n\nTHANK YOU FOR PLAYING, AGENT " + name + ".\nYOUR WORK IS DONE.\nWE ARE ALL PROUD OF YOU.\nYOU HAVE BEEN A HUGE HELP TO SIGMA.\n\nNOW YOU HAVE A NEW MISSION.\nYOUR FINAL MISSION.\nWE PROMISE YOU IT WON\'T BE DIFFICULT.\n\nIN FACT, WE THINK YOU ARE A PERFECT FIT FOR IT.\nIT WILL SUIT YOU QUITE NICELY.\nARE YOU READY TO HEAR WHAT IT IS?\n(Y/N)";
+                        var rejections = [
+                            "",
+                            "WE THINK YOU WILL REALLY LIKE IT.\nYOU SHOULD REALLY HEAR IT.",
+                            "YOU SPENT HOURS GETTING HERE.\nYOU ARE SO CLOSE TO BEING DONE!\nSO WHAT DO YOU SAY?\nDO YOU WANT TO HEAR IT?",
+                            "YOU WERE DOING SO WELL UNTIL NOW.\nREDEEM YOURSELF AND FINISH YOUR MISSION.",
+                            "WE ARE GETTING ANNOYED.\nSAY YES.",
+                            "JUST SAY YES."
+                        ];
+                        
+                        setTimeout(function(){
+                          writeText(output, function(){
+                              setInputEnabled(true);
+                              var hearResponse = function(result){
+                                  if(result.match(/^(y|yes|si|affirmative|continue)$/)){
+                                      clearConsole();
+                                      setInputEnabled(false);
+                                      writeText("GREAT!\nYOUR MISSION IS:\n\n\nLEAVE THIS PLACE.", function(){
+                                      document.title = "GOODBYE";
+                                      setTimeout(function(){
+                                          $("#console,#input,body").toggleClass("red").toggleClass("glitch");
+                                          setTimeout(function(){
+                                              clearConsole();
+                                              viewSigmaLogo("\"THE ONLY WINNING MOVE IS NOT TO PLAY\" - WARGAMES");
+                                              setTimeout(function(){
+                                                  window.open("","_self").close();
+                                              }, 500);
+                                          }, 3000);
+                                      }, 100);
+                                      });
+                                  }else{
+                                      setInputEnabled(false);
+                                      if(rejections.length > 1){
+                                        rejections.shift();
+                                      }
+                                      
+                                      writeText(rejections[0] + "\n(Y/N)", function(){
+                                          setInputEnabled(true);
+                                          waitForInput(hearResponse);
+                                      });
+                                  }
+                              };
+                              waitForInput(hearResponse);
+                          });
+                        }, 3000);
+                    }, 3000);
+                });
+            }
         },
         email:function(){
-          if(satelliteLocation==2){
-            var emailFunction = function(result){
-              if(result=="kappa"){
-                logn("VGhlcmUgaXMgYSBncm91cCBjYWxsZWQga2FwcGEgd2hvIHNlZW1zIHRvIGJlIGFzc29jaWF0ZWQgd2l0aCBTaWdtYSBzb21laG93LiBUaGVzZSBzcGllcyBwbGFudCBtZXNzYWdlcyB0aHJvdWdob3V0IFBsYW5vIEFjYWRlbXkuIEkgaGF2ZSBpbnN0cnVjdGVkIG91ciBhZ2VudHMgdG8gZmluZCBhbmQgZGVzdHJveSB0aGlzIHRocmVhdC4=");
-              }else if(result=="sigma"){
-                logn("Iieoaaoizlgeqggqmcxhrxfdkymyqgnnhzmyemdzyslniyiwrvkihrkuogiqemgaoodbphykiytpzltduuemoizlmq");
-              }else if(result=="cold case"){
-                logn("Dv ziv ivlkvmrmt hlnv xzhvh uiln z olmt grnv ztl. Dv szev srivw hlnv ivxifrg wvgvxgrevh zg Kozml Zxzwvnb gl rmevhgrtzgv gsvn. Gsvb droo hvmw ivjfvhgh uli verwvmxv, hl kivkziv blfi xzhv urovh.");
-              }else if(result=="evidence"){
-                logn("SETSH DNEKG ROCVE EDDTV LSNFE NUNAE ROOHE IRAAI FTMHI NAWOH EMTYT MCDGX TNMFE CLERS NOOUE DCNEN AAOAO HILIT RUS");
-              }else if(result=="task"){
-                logn(".... .....  .... ...  . .....  /  .... ....  .. ...  . .....  /  .... .....  ... .....  ... .  ... ....  . .  . ....  /  . ...  ... ....  ... ..  ... ..  . .  ... ...  . ....  ");
-              }else{
-                logn("EMAIL NOT FOUND.");
-              }
-              
-              addCommand("upload");
-              waitForInput(func);
-            }
-            
-            logn("EMAILS FOUND. PLEASE ENTER THE SUBJECT OF AN EMAIL TO READ.");
-            waitForInput(emailFunction);
-          }else if(satelliteLocation==3){
-            logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
-            waitForInput(func);
-          }else{
-            logn("NO EMAILS FOUND AT THIS LOCATION.");
-            waitForInput(func);
-          }
-        }
-      };
-     
-      function sleep(milliseconds) {
-        var start = new Date().getTime();
-        for (var i = 0; i < 1e7; i++) {
-          if ((new Date().getTime() - start) > milliseconds){
-            break;
-          }
-        }
-      }
-      
-      function log(message){
-        $("#console").append(message);
-      }
-      
-      function logn(message){
-        console.log($("#console").height()+" "+$(window).height());
-        if($("#console").height()>=$(window).height()){
-          clearConsole();
-        }
-        log(message + "<br>");
-      }
-      
-      function waitForInput(func){
-        $("#input").unbind();
-        $('#input').keyup(function(e){
-          if(e.keyCode == 13)
-          {
-            var text= $("#input").val().replace(/\n|\r\n|<br>/g,"");
-            logn(text);
-            $(this).val("");
-            
-            $("#input").unbind();
-            
-            func(text.toLowerCase());
-            
-          }
-        });
-      }
-      
-      function viewSigmaLogo(message){
-        logn(`
-        <pre>                         
-              :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                     
-              :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                     
-               @@@@@@@.............,:+@@@@@@@#                     
-                @@@@@@@                 ,@@@@#                     
-                 @@@@@@@                  @@@#                     
-                 @@@@@@#                   @@#                     
-                  :@@@@@@:                 @@#                     
-                   #@@@@@@                 !@#                     
-                    @@@@@@@                 @#                     
-                     @@@@@@@                ;#                     
-                      @@@@@@@               :                     
-                       @@@@@@#                                     
-                       :@@@@@@:                                    
-                        #@@@@@@                                    
-                         @@@@@@@                                   
-                          @@@@@@@                                  
-                           @@@@@@@                                 
-                            @@@@@@+                                
-                            ;@@@@@@,                               
-                             #@@@@@@                               
-                              @@@@@@@                              
-                               @@@@@@  `+message+`                            
-                                @@@@                               
-                                :@@                                
-                               .@@                                
-                               @@                                 
-                              @@.                                  
-                             @@:                                   
-                            @@;                                    
-                           @@+                                     
-                          @@#                                      
-                         @@#                                       
-                        @@@                                        
-                       @@@                                         
-                      @@@                    @                     
-                     @@@                    @@                     
-                    #@@                     #@                     
-                   #@@                      @@                     
-                  +@@                      +@@                     
-                 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-                :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-               ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-               @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
-              ++++++++++++++++++++++++++++++++      
-</pre>
-        `);
-      }
-      
-      function clearConsole(){
-        $("#console").empty();
-      }
-      
-      $(function(){
-        logn("LOADING...");
-        
-        window.onbeforeunload = (function(){
-          setCookie("SIGMA-commands",enabledCommands.join(","));
-          setCookie("SIGMA-satLocation",satelliteLocation);
-        });
-        
-        enabledCommands = ["help","exit","sigma","code","interpol","clear"]; 
-        var savedCommands = getCookie("SIGMA-commands").split(",");
-        if(savedCommands&&savedCommands.length>1){
-          for(var i = 0;i<savedCommands.length;++i){
-            addCommand(savedCommands[i]);
-          }
-        }
-        
-        var satLocation = getCookie("SIGMA-satLocation");
-        if(satLocation){
-          satelliteLocation = satLocation;
-        }
-        
-        logn("Σ CONSOLE ACTIVATED.");
-        logn("AGENT, <span class='red'>WORK</span> COMES BEFORE <span class='red'>PLAY.</span> SIGMA WANTS PEOPLE WHO DO THEIR HOMEWORK MORE THAN PEOPLE WHO HACK THIS CONSOLE.");
-        if(satelliteLocation==2){
-          logn('EDTEEALWT H UJC F"AKXRA H MI IHTESBETO TS"');
-        }else if(satelliteLocation==1&&enabledCommands.indexOf("uplink")>=0){
-          logn("431144153131244415 453531243325 1543441112312443231514. 454315 442315 453531243325 13343232113314");
-        }else{
-          logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
-        }
-        
-        var savedName = getCookie("SIGMA-name");
-        if(savedName&&savedName!=""&&savedName.length>1&&enabledCommands.indexOf(savedName)<0){
-          name = savedName;
-          waitForInput(func);
-        }else{
-          logn("ENTER YOUR <span class='red'>REAL</span> FIRST AND LAST NAME. THIS WILL BE USED FOR POINTS.");
-          
-          var nameFunction = function(result){
-            if(result&&result!=""&&result.length>1&&enabledCommands.indexOf(result)>=0){
-              logn("<span class='red'>NAME</span> IS NEEDED BEFORE COMMANDS CAN BE EXECUTED");
-              waitForInput(nameFunction);
+            if(satelliteLocation==2){
+                var emailFunction = function(result){
+                    if(result=="kappa"){
+                        logn("VGhlcmUgaXMgYSBncm91cCBjYWxsZWQga2FwcGEgd2hvIHNlZW1zIHRvIGJlIGFzc29jaWF0ZWQgd2l0aCBTaWdtYSBzb21laG93LiBUaGVzZSBzcGllcyBwbGFudCBtZXNzYWdlcyB0aHJvdWdob3V0IFBsYW5vIEFjYWRlbXkuIEkgaGF2ZSBpbnN0cnVjdGVkIG91ciBhZ2VudHMgdG8gZmluZCBhbmQgZGVzdHJveSB0aGlzIHRocmVhdC4=");
+                    }else if(result=="sigma"){
+                        logn("Iieoaaoizlgeqggqmcxhrxfdkymyqgnnhzmyemdzyslniyiwrvkihrkuogiqemgaoodbphykiytpzltduuemoizlmq");
+                    }else if(result=="cold case"){
+                        logn("Dv ziv ivlkvmrmt hlnv xzhvh uiln z olmt grnv ztl. Dv szev srivw hlnv ivxifrg wvgvxgrevh zg Kozml Zxzwvnb gl rmevhgrtzgv gsvn. Gsvb droo hvmw ivjfvhgh uli verwvmxv, hl kivkziv blfi xzhv urovh.");
+                    }else if(result=="evidence"){
+                        logn("SETSH DNEKG ROCVE EDDTV LSNFE NUNAE ROOHE IRAAI FTMHI NAWOH EMTYT MCDGX TNMFE CLERS NOOUE DCNEN AAOAO HILIT RUS");
+                    }else if(result=="task"){
+                        logn(".... .....  .... ...  . .....  /  .... ....  .. ...  . .....  /  .... .....  ... .....  ... .  ... ....  . .  . ....  /  . ...  ... ....  ... ..  ... ..  . .  ... ...  . ....  ");
+                    }else{
+                        logn("EMAIL NOT FOUND.");
+                    }
+                    
+                    addCommand("upload");
+                    waitForInput(func);
+                };
+                
+                logn("EMAILS FOUND. PLEASE ENTER THE SUBJECT OF AN EMAIL TO READ.");
+                waitForInput(emailFunction);
+            }else if(satelliteLocation==3){
+                logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
+                waitForInput(func);
             }else{
-              name = result;
-              setCookie("SIGMA-name",result);
-              waitForInput(func);
+                logn("NO EMAILS FOUND AT THIS LOCATION.");
+                waitForInput(func);
             }
-          }
-          waitForInput(nameFunction);
+        }
+        };
+     
+        function sleep(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds){
+                    break;
+                }
+            }
         }
         
-      })
+        function setInputEnabled(enabled){
+            $("#input").attr("disabled", !enabled);
+        }
+        
+        function log(message){
+            $("#console").append(message);
+        }
+        
+        function logn(message){
+            if($("#console").height()>=$(window).height()){
+                clearConsole();
+            }
+            log(message + "<br>");
+        }
+        
+        function waitForInput(func){
+            $('#input').unbind().keyup(function(e){
+                if(e.keyCode == 13){
+                    var text= $("#input").val().replace(/\n|\r\n|<br>/g,"");
+                    logn(text);
+                    $(this).val("");
+                    
+                    $("#input").unbind();
+                    
+                    func(text.toLowerCase());
+                }
+            });
+        }
+        
+        function writeText(output, complete){
+            var printLetter = function(){
+                if(output.length >= 1){
+                    log(output[0]);
+                    if(output[0] === '\n'){
+                        log("<br>");
+                        setTimeout(printLetter, 2000);
+                    }else{
+                        setTimeout(printLetter, 75);
+                    }
+                    output = output.substr(1);
+                }else{
+                    logn("");
+                    complete();
+                }
+            };
+            
+            printLetter();
+        }
+        
+        function viewSigmaLogo(message){
+            logn(`
+            <pre>                         
+                    :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                     
+                    :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                     
+                     @@@@@@@.............,:+@@@@@@@#                     
+                    @@@@@@@                 ,@@@@#                     
+                     @@@@@@@                  @@@#                     
+                     @@@@@@#                   @@#                     
+                        :@@@@@@:                 @@#                     
+                         #@@@@@@                 !@#                     
+                        @@@@@@@                 @#                     
+                         @@@@@@@                ;#                     
+                            @@@@@@@               :                     
+                             @@@@@@#                                     
+                             :@@@@@@:                                    
+                            #@@@@@@                                    
+                             @@@@@@@                                   
+                                @@@@@@@                                  
+                                 @@@@@@@                                 
+                                @@@@@@+                                
+                                ;@@@@@@,                               
+                                 #@@@@@@                               
+                                    @@@@@@@                              
+                                     @@@@@@  `+message+`                            
+                                    @@@@                               
+                                    :@@                                
+                                     .@@                                
+                                     @@                                 
+                                    @@.                                  
+                                 @@:                                   
+                                @@;                                    
+                                 @@+                                     
+                                @@#                                      
+                             @@#                                       
+                            @@@                                        
+                             @@@                                         
+                            @@@                    @                     
+                         @@@                    @@                     
+                        #@@                     #@                     
+                         #@@                      @@                     
+                        +@@                      +@@                     
+                     ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                    :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                     ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                    @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                    ++++++++++++++++++++++++++++++++      
+    </pre>
+            `);
+        }
+        
+        function clearConsole(){
+            $("#console").empty();
+        }
+        
+        $(function(){
+            logn("LOADING...");
+            
+            enabledCommands = ["help","exit","sigma","code","interpol","clear"];
+            
+            window.onbeforeunload = (function(){
+                setCookie("SIGMA-commands",enabledCommands.join(","));
+                setCookie("SIGMA-satLocation",satelliteLocation);
+            });
+            
+            var savedName = getCookie("SIGMA-name");
+            if(savedName&&savedName!=""&&savedName.length>1&&enabledCommands.indexOf(savedName)<0){
+                name = savedName;
+
+                var savedCommands = getCookie("SIGMA-commands").split(",");
+                if(savedCommands&&savedCommands.length>1){
+                    for(var i = 0;i<savedCommands.length;++i){
+                        addCommand(savedCommands[i]);
+                    }
+                }
+                
+                var satLocation = getCookie("SIGMA-satLocation");
+                if(satLocation){
+                    satelliteLocation = satLocation;
+                }
+                
+                logn("IDENTIFICATION SUCCESS: WELCOME AGENT " + name);
+                logn("Σ CONSOLE READY.");
+                logn("AGENT, <span class='red'>WORK</span> COMES BEFORE <span class='red'>PLAY.</span> SIGMA WANTS PEOPLE WHO DO THEIR HOMEWORK MORE THAN PEOPLE WHO HACK THIS CONSOLE.");
+                if(satelliteLocation==2){
+                    logn('EDTEEALWT H UJC F"AKXRA H MI IHTESBETO TS"');
+                }else if(satelliteLocation==1&&enabledCommands.indexOf("uplink")>=0){
+                    logn("431144153131244415 453531243325 1543441112312443231514. 454315 442315 453531243325 13343232113314");
+                }else{
+                    logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
+                }
+                
+                waitForInput(func);
+            }else{
+                setInputEnabled(false);
+                writeText("IDENTIFICATION FAILED.\nFULL FIRST AND LAST NAME REQUIRED FOR AUTHENTICATION.\nPLEASE ENTER THIS INFORMATION BELOW:", function(){
+                  setInputEnabled(true);
+                  var nameFunction = function(result){
+                      if(result&&result!=""&&result.length>1&&enabledCommands.indexOf(result)>=0){
+                          logn("AUTHENTICATION FAILED: <span class='red'>NAME</span> IS NEEDED.");
+                          waitForInput(nameFunction);
+                      }else{
+                          setInputEnabled(false);
+                          name = result;
+                          setCookie("SIGMA-name",result);
+                          writeText("WELCOME, AGENT " + name + ".\nYOU HAVE A LOT OF WORK TO DO.\nLET\'S GET STARTED.\n\nTHIS CONSOLE IS FILLED WITH SECRETS, PUZZLES, AND CODES.\nIT IS YOUR MISSION TO SOLVE IT.\nTHE CHALLENGES YOU WILL FACE WILL GET HARDER AS YOU PROGRESS.\nTHIS IS NOT FOR THE WEAK.\nWE KNOW YOU CAN DO IT.\nNOW THAT YOU HAVE YOUR CHALLENGE,\n\nLET US BEGIN.", function(){
+                            $("body").toggleClass("red");
+                            setTimeout(function(){
+                              window.location.reload();
+                            }, 5000);
+                          });
+                      }
+                  };
+                  waitForInput(nameFunction);
+                });
+            }
+        });
     </script>
 </html>
