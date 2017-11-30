@@ -127,6 +127,7 @@
                     setTimeout(function(){
                         logn("INCORRECT PASSWORD ATTEMPT. THIS INCIDENT WILL BE RECORDED.");
                         setInputEnabled(true);
+                        waitForInput(func);
                     }, 3000);
                 });
             },
@@ -150,7 +151,7 @@
             code:function(){
                 logn("CONNECTING TO REMOTE SERVER...");
                 //because they cheated. dont let the same fate happen to you.
-                if(name==="cody leonard"||name==="jason lu"){
+                if(name==="jason lu"){
                   logn("<span class='red'>DIRTY CHEATERS CAN'T SUBMIT CODES</span>");
                   //at least i gave them enough mercy to allow them to add more commands
                   waitForInput(func);
@@ -275,7 +276,9 @@
                 logn("LOCATIONS SAVED:");
                 logn("1. 33N, 96W: PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
                 logn("2. 45N, 4E: INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
-                if(satelliteLocation==3)logn("3. ???, ???: SIGMA (CURRENT)");
+                if(satelliteLocation == 3){
+                    logn("3. ???, ???: SIGMA (CURRENT)");
+                }
                 logn("ENTER THE NUMBER OF THE LOCATION TO REDIRECT TO");
                 
                 var redirectFunction = function(result){
@@ -354,7 +357,6 @@
                     waitForInput(func);
                 }else{
                     setInputEnabled(false);
-                    document.title = "NUCLEAR LAUNCH DETECTED";
                     clearConsole();
                     $("body").toggleClass("centered");
                     logn("<br><br><br><br><br>");
@@ -547,9 +549,9 @@ _________________________INTERPOL HQ___________________
                     
                     if(character === '\n'){
                         logn("");
-                        setTimeout(printLetter, 2000);
+                        setTimeout(printLetter, 1500);
                     }else if(character !== ' '){
-                        setTimeout(printLetter, 70);
+                        setTimeout(printLetter, 60);
                     }else{
                         printLetter();
                     }
@@ -686,7 +688,23 @@ _________________________INTERPOL HQ___________________
                 logn("IDENTIFICATION SUCCESS: WELCOME AGENT " + name);
                 logn("Σ CONSOLE READY.");
                 logn("AGENT, <span class='red'>WORK</span> COMES BEFORE <span class='red'>PLAY.</span> SIGMA WANTS PEOPLE WHO DO THEIR HOMEWORK MORE THAN PEOPLE WHO HACK THIS CONSOLE.");
-                if(satelliteLocation==2){
+                if(getCookie("SIGMA-done")){
+                    $("body").toggleClass("centered");
+                    setInputEnabled(false);
+                    clearConsole();
+                    writeText("ERROR: FAILED TO CONNECT TO SATELLITE\nTRYING AGAIN...\nCONNECTION FAILED: TIMEOUT\n\n\n", function(){
+                        clearConsole();
+                        writeText("INITIATING EMERGENCY PROTOCOLS\n\nTRIANGULATING LAST KNOWN LOCATION... 100% COMPLETE\nCALCULATING ENTRY TRAJECTORY... 100% COMPLETE\nLOCATING BLACK BOX RECOVERY SIGNALS... 100% COMPLETE\n\n\n", function(){
+                            clearConsole();
+                            writeText("RECOVERING LAST TRANSMISSION...\n\n\nSATELLITE ERROR 214: DETECTED CATASTROPHIC FAIvxaarrovcrppvwrtilzhtocxtrblyygegavuxxvp\ngoodbye, sigma\n\n\nCONNECTION TERMINATED\n\n", function(){
+                                clearConsole();
+                                writeText("\nINCOMING TRANSMISSION FROM Σ HQ:\n\nTHE SATELLITE HAS CRASHED.\nCAUSE OF FAILURE IS UNKNOWN.\nWE HAVE ALREADY DEPLOYED AGENTS TO RECOVER IT.\n\nIN FACT, WE BELIEVE THAT YOU ARE ONE OF THOSE AGENTS.\nYOU HAVE A LOT TO DO.\nSOME HOMEWORK, POSSIBLY.\nSOMETHING INVOLVING A SUBMARINE.\nTO RECOVER THE SATELLITE.\n\nGO DO IT.\nYOU ARE DONE HERE.\n\nGO AND SMELL THE ROSES.\n\n\nTHANK YOU FOR PLAYING OUR GAME\n-Σ\n\n\n\n(YOU CAN LEAVE NOW)", function(){
+                                    setInputEnabled(false);
+                                });
+                            });
+                        });
+                    });
+                }else if(satelliteLocation==2){
                     logn('EDTEEALWT H UJC F"AKXRA H MI IHTESBETO TS"');
                 }else if(satelliteLocation==1&&enabledCommands.indexOf("uplink")>=0){
                     logn("431144153131244415 453531243325 1543441112312443231514. 454315 442315 453531243325 13343232113314");
