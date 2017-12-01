@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        
+        <link href="Reset.css"rel="stylesheet"text="text/css">
+        
+        <title>SIGMA</title>
+        
+        <link href="https://script.google.com"rel="dns-prefetch">
+        <link href="https://apis.google.com"rel="dns-prefetch">
+        <link href="https://ajax.googleapis.com"rel="dns-prefetch">
+        
+        <link href="favicon.ico"rel="shortcut icon"type="image/x-icon">
+        
+        <style>
+            html,body{
+              height:100%;
+            }
+        
+            body{
+              background-color:black;
+              color:green;
+              font-family: Consolas, Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+              font-size:1em;
+              display: flex;
+              flex-direction: column; 
+              overflow-y: auto;
+            }
+
+            #console, #input{
+                text-shadow: 0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px;
+            }
+
+            #console::after {
+              content: " ";
+              display: block;
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              right: 0;
+              background: rgba(18, 16, 16, 0.1);
+              opacity: 0;
+              z-index: 2;
+              pointer-events: none;
+            }
+            #console::before {
+              content: " ";
+              display: block;
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              right: 0;
+              background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+              z-index: 2;
+              background-size: 100% 2px, 3px 100%;
+              pointer-events: none;
+            }
+
+
+            
+            #input,#console{
+              display:inline-block;
+              vertical-align:top;
+              outline:none;
+              border:none;
+              background-color: rgba(0,0,0,0);
+              line-height:1em;
+            }
+            
+            #input,textarea{
+              height:100%;
+              width:99%;
+              color:green;
+              resize: none;
+              box-sizing: border-box;
+              font-family: inherit;
+              font-size: inherit;
+              margin:0;
+              padding:0;
+              top:0;
+            }
+            
+            em{
+              font-weight:bold;
+              font-style:italic;
+            }
+            
+            .red{
+              color:red !important;
+            }
+            
+            .centered{
+              text-align: center;
+            }
+            
+            .centered #input{
+              white-space: normal;
+              text-align: justify;
+              -moz-text-align-last: center; /* Firefox 12+ */
+              text-align-last: center;
+            }
+            
+            #explosion{
+              animation-name: explosionAnimation;
+              animation-iteration-count: infinite;
+              animation-duration: 750ms;
+              animation-timing-function: linear;
+              animation-direction: alternate;
+            }
+            
+            @keyframes explosionAnimation{
+                from   {color: red;}
+                to {color: inherit;}
+            }
+            
+            .glitch{font-family:Courier;animation:glitch1 3.5s infinite;position:relative;}.glitch::after,.glitch::before{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%}.glitch::after{color:#0F0;animation:glitch2 1.5s infinite alternate-reverse}.glitch::before{color:#f16f6f;animation:glitch3 2.5s infinite alternate-reverse}@keyframes glitch1{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:1}7%{transform:skew(-.5deg,-.9deg);opacity:.75}30%{transform:skew(.8deg,-.1deg);opacity:.75}55%{transform:skew(-1deg,.2deg);opacity:.75}75%{transform:skew(.4deg,1deg);opacity:.75}}@keyframes glitch2{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:.25}7%{transform:translate(-2px,-3px);opacity:.5}30%{transform:translate(-5px,-2px);opacity:.5}55%{transform:translate(-5px,-1px);opacity:.5}75%{transform:translate(-2px,-6px);opacity:.5}}@keyframes glitch3{0%,10%,100%,27%,35%,50%,52%,72%,80%{transform:none;opacity:.25}7%{transform:translate(2px,3px);opacity:.5}30%{transform:translate(5px,2px);opacity:.5}55%{transform:translate(5px,1px);opacity:.5}75%{transform:translate(2px,6px);opacity:.5}}
+        </style>
+    </head>
+    <body>
+        <code id="console"></code><textarea id="input"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"maxlength="256"></textarea>
+    </body>
+    <!--Scripts are loaded in here, at the end, to make it fastest-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"type="text/javascript"></script>
+    <script type="text/javascript">
+        if(!$){
+        console.error("Resources failed to load.");
+        document.write("<h1 id='message'>Resources failed to load. Please reload the page.</h1>");
+        }
+        if (window.location.protocol !== 'https:') {
+        document.write("<h1 id='message'>Not using https. Please reload the page using https</h1>");
+        }
+    </script>
+     <script>
+        /* globals $*/
+     
+        //SIGMA doesnt like cheaters. Dont read through this code.
+        var strikes = 0;
+        
+        var name;
+        
+        var satelliteLocation = 1;
+        
+        var $input = $("#input"), $console = $("#console");
+        
+        var enabledCommands;
+        var commands = {
+            ls:function(){
+                logn("ACCESS DENIED");
+                waitForInput(func);
+            },
+            sudo:function(){
+                logn("ENTER SUDO PASSWORD:");
+                waitForInput(function(password){
+                    setInputEnabled(false);
+                    setTimeout(function(){
+                        logn("INCORRECT PASSWORD ATTEMPT. THIS INCIDENT WILL BE RECORDED.");
+                        setInputEnabled(true);
+                        waitForInput(func);
+                    }, 3000);
+                });
+            },
+            help:function(){
+                logn("AGENTS SHOULDN'T NEED <span class='red'>HELP</span>");
+                waitForInput(func);
+            },
+            exit:function(){
+                logn("YOU CAN'T LEAVE WHILE THERE IS STILL <span class='red'>WORK</span> TO DO");
+                waitForInput(func);
+            },
+            sigma:function(){
+                viewSigmaLogo("SIGMA");
+                waitForInput(func);
+            },
+            clear:function(){
+                clearConsole();
+                logn("CLEARED CONSOLE.");
+                waitForInput(func);
+            },
+            code:function(){
+                logn("CONNECTING TO REMOTE SERVER...");
+                //because they cheated. dont let the same fate happen to you.
+                if(name==="jason lu"){
+                  logn("<span class='red'>DIRTY CHEATERS CAN'T SUBMIT CODES</span>");
+                  //at least i gave them enough mercy to allow them to add more commands
+                  waitForInput(func);
+                }else{
+                  logn("USING AUTHENTICATION: "+name);
+                  logn("ENTER CODE TO SEND:");
+                  waitForInput(function(message){
+                      var settings = {
+                      "async": true,
+                      "crossDomain": true,
+                      "dataType":"jsonp",
+                      "url": "https://script.google.com/macros/s/AKfycbwUZGwN_7lKybnQb8bBLEc1vhMTsXWQUDu28vJSMAaDdVw8A832/exec",
+                      "method": "POST",
+                      "headers": {
+                          "cache-control": "no-cache",
+                      },
+                      "data": {
+                          "name":encodeURIComponent(name),
+                          "message":encodeURIComponent(message),
+                          "callback":"foo"
+                      }
+                      };
+                  
+                      logn("SENT CODE: "+message);
+                      
+                      $.ajax(settings).done(function (response) {
+                        logn("DOWNLOADING MESSAGE...");
+                        var json = JSON.parse(response);
+                        setTimeout(function(){
+                          logn("MESSAGE DOWNLOAD COMPLETE:");
+                          logn(json.message);
+                          if(json.message=="WRONG!"){
+                            ++strikes;
+                            logn("YOU HAVE "+strikes+" STRIKE"+(strikes!=1 ? "S" : ""));
+                            if(strikes==1){
+                              $console.toggleClass("red");
+                              $input.toggleClass("red");
+                            }else if(strikes==2){
+                              $("body").toggleClass("glitch");
+                              $console.toggleClass("glitch").attr("data-text","ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED ACCESS DENIED");
+                            }else if(strikes==3){
+                              clearConsole();
+                              viewSigmaLogo("ACCESS DENIED. GOODBYE");
+                              setTimeout(function(){
+                                  window.open("","_self").close();
+                              }, 2000);
+                            }
+                          }else{
+                              strikes = 0;
+                              
+                              addCommand(json.command);
+                          }
+                          
+                          waitForInput(func);
+                        });
+                      }, 1000);
+                      
+                      logn("WAITING FOR REQUEST...");
+                  });
+                }
+            },
+            interpol:function(){
+                logn("<span class='red'>DO NOT MENTION THAT NAME</span>");
+                waitForInput(func);
+            },
+            uplink:function(){
+                if(satelliteLocation==1){
+                  logn("S<em>T</em>ARTING KE<em>Y</em>ED U<em>P</em>LINK...");
+                  logn("O<em>E</em>NING SOCKETED CONNECTION...");
+                  logn("<em>D</em>ETECTING SATELLITE...");
+                  logn("C<em>O</em>NNECTING TO <em>W</em>ORLD SATELLITE...");
+                  logn("COMMU<em>N</em>ICATIONS ESTAB<em>L</em>ISHED.");
+                  logn("SATELLITE IS N<em>O</em>T BRO<em>A</em>DCASTING ANY MESSAGES");
+                  logn("CURRENTLY POINTE<em>D</em> AT 33N, 96W (PLANO ACADEMY HS)");
+                }else if(satelliteLocation==2){
+                  logn("SATELLITE UPLINK ALREADY ESTABLISHED.");
+                  logn("SATELLITE IS BROADCASTING MESSAGES.");
+                  logn("CURRENTLY POINTED AT 45N, 4E (INTERPOL)");
+                }else if(satelliteLocation==3){
+                  logn("SATELLITE UPLINK ALREADY ESTABLISHED.");
+                  logn("SATELLITE IS BROADCASTING MESSAGES.");
+                  logn("CURRENTLY POINTED AT ???, ??? (SIGMA)");
+                }
+                addCommand("download");
+                waitForInput(func);
+            },
+            redirect:function(){
+                clearConsole();
+                //credits go for this sweet map to Matthew Thomas (1998)
+                logn(`
+<pre>
+180 150W  120W  90W   60W   30W  000   30E   60E   90E   120E  150E 180
+|    |     |     |     |     |    |     |     |     |     |     |     |
++90N-+-----+-----+-----+-----+----+-----+-----+-----+-----+-----+-----+
+|          . _..::__:  ,-"-"._       |7       ,     _,.__             |
+|  _.___ _ _<_>\`!(._\`.\`-.    /        _._     \`_ ,_/  '  '-._.---.-.__|
+|.{     " " \`-==,',._\\{  \\  / {)     / _ ">_,-' \`                  - _|
++ \\_.:--.       \`._ )\`^-. "'      , [_/(                       __,/-' +
+|'"'     \\         "    _L         _,--'                )     /. (|   |
+|         |           ,'         _)2.\\\\._<>                _,' /  '   |
+|         \`.         /          [_/_'\` \`"(                <'}  )      |
++30N       \\    1.-. )          /   \`-'"..' \`:._          _)  '       +
+|   \`        \\  (  \`(          /         \`:\\  > \\  ,-^.  /' '         |
+|             \`._,   ""        |           \\\`'   \\|   ?_)  {\\         |
+|                \`=.---.       \`._._       ,'     "\`  |' ,- '.        |
++000               |    \`-._        |     /          \`:\`<_|h--._      +
+|                  (        >       .     | ,          \`=.__.\`-'\\     |
+|                   \`.     /        |     |{|              ,-.,\\     .|
+|                    |   ,'          \\   / \`'            ,"     \\     |
++30S                 |  /             |_'                |  __  /     +
+|                    | |                                 '-'  \`-'   \\.|
+|                    |/                                        "    / |
+|                    \\.                                            '  |
++60S                                                                  +
+|                     ,/           ______._.--._ _..---.---------._   |
+|    ,-----"-..?----_/ )      _,-'"             "                  (  |
+|.._(                  \`-----'                                      \`-|
++90S-+-----+-----+-----+-----+----+-----+-----+-----+-----+-----+-----+
+</pre>
+                `);
+                logn("REDIRECTING SATELLITE...");
+                logn("LOCATIONS SAVED:");
+                logn("1. 33N, 96W: PLANO ACADEMY HS"+(satelliteLocation==1 ? "(CURRENT)" : ""));
+                logn("2. 45N, 4E: INTERPOL"+(satelliteLocation==2 ? "(CURRENT)" : ""));
+                if(satelliteLocation == 3){
+                    logn("3. ???, ???: SIGMA (CURRENT)");
+                }
+                logn("ENTER THE NUMBER OF THE LOCATION TO REDIRECT TO");
+                
+                var redirectFunction = function(result){
+                  satelliteLocation=result;
+                  if(result==2){
+                      writeText("SATELLITE REDIRECTION COMPLETE.\nNEW TARGET: 45N, 4E (INTERPOL)\nMESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
+                  }else if(result==1){
+                      writeText("SATELLITE REDIRECTION COMPLETE.\nNEW TARGET: 33N, 96W (PLANO ACADEMY HS)\nNO MESSAGES FOUND.");
+                  }else if(result==3){
+                      writeText("SATELLITE REDIRECTION COMPLETE.\nNEW TARGET: ???, ??? (SIGMA)\nMESSAGES FOUND. USE DOWNLOAD TO RETRIEVE.");
+                  }else{
+                      logn("NOT A VALID LOCATION. MAKE SURE TO USE THE NUMBER OF THE LOCATION");
+                      waitForInput(redirectFunction);
+                  }
+                };
+                addCommand("download");
+                waitForInput(redirectFunction);
+            },
+            download:function(){
+                logn("CONNECTED TO UPLINK.");
+                logn("EXTRACTED DATA FROM TARGET.");
+                logn("DOWNLOADING...");
+                if(satelliteLocation==1){
+                  writeText("XGA GSS CRGS YBXAAQG OJQ DSNG 'DRIVY FETXSOG'");
+                }else if(satelliteLocation==2){
+                  writeText("VIILI IVGIRVERMT NVHHZTVH, HKVXRZO KILGLXLO IVJFRIVW. HVMW 'vnzro kilglxlo' ERZ GSV XLWV XLNNZMW");
+                }else if(satelliteLocation==3){
+                  writeText("LEGA TQY. YNU WEJJ LAVAQ BELM WDAQA RECKS ER.");
+                }
+            },
+            upload:function(){
+               logn("SENT PAYLOAD. WAITING FOR RESPONSE...");
+                if(satelliteLocation==1){
+                  logn("<span class='red'>ERROR: NO RECEIVER FOUND</span>");
+                }else if(satelliteLocation==2){
+                  writeText("..............................", function(){
+                    addCommand("hack");
+                    logn("ENCRYPTED TRANSMISSION RECEIVED FROM UNKNOWN SOURCE:");
+                    logn("01010100 01001000 01000101 00100000 01010000 01000001 01011001 01001100 01001111 01000001 01000100 00100000 01001001 01010011 00100000 01001001 01001110 00100000 01010000 01001100 01000001 01000011 01000101 00101110 00100000 01010101 01010011 01000101 00100000 01010100 01001000 01000101 00100000 01001000 01000001 01000011 01001011 00100000 01000011 01001111 01001101 01001101 01000001 01001110 01000100 00100000 01010100 01001111 00100000 01000101 01011000 01000101 01000011 01010101 01010100 01000101");
+                  });
+                }else if(satelliteLocation==3){
+                  logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
+                }
+                waitForInput(func);
+            },
+            hack:function(){
+                if(satelliteLocation!=2){
+                  logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
+                }else{
+                  writeText("PAYLOAD EXECUTION CODE SENT. STANDBY FOR A RESPONSE.\n......................\nHACK SUCCESSFUL.\nENCRYPTED TRANSMISSION RECEIVED FROM UNKNOWN SOURCE:\nFS PCAET UP IOPX. RCPE \"ODVMPBE UBDAFYAE\" YFD QKC DNEA DNSSCLCY");
+                }
+            },
+            payload:function(){
+                if(satelliteLocation!=2){
+                  logn("<span class='red'>ERROR: PAYLOAD NOT FOUND</span>");
+                }else{
+                  setInputEnabled(false);
+                  writeText("ARMING PAYLOAD...\n..............................................................\nPAYLOAD ARMED.", function(){
+                    setTimeout(function(){
+                      setInputEnabled(true);
+                      logn("ENCRYPTED TRANSMISSION RECEIVED FROM UNKNOWN SOURCE:<br><b>5</b>0 12 247 113 223 50 129 22<i>3</i> 12 1<i>2</i>4 103 108 50 223 247 99 12 <i>3</i>07 223 185 129 233 223 50 21 103 223 185 99 108 12 247 223 288 129 102 103");
+                    }, 2000);
+                  });
+                  
+                  //i thought i said no cheating!
+                  //heRe iS a prime plAce to seek the key, but you will come up e mpty haNde d ...
+                }
+                waitForInput(func);
+            },
+            deploy:function(){
+                if(satelliteLocation == 3){
+                    logn("<span class='red'>I AM SORRY, BUT I CAN NOT LET YOU DO THAT. DO NOT ATTEMPT TO DESTROY US.</span>");
+                    waitForInput(func);
+                }else if(satelliteLocation!=2){
+                    logn("<span class='red'>ERROR: NO PAYLOAD FOUND TO DEPLOY AT THIS LOCATION. REDIRECT SATELLITE TO VALID COORDINATES.</span>");
+                    waitForInput(func);
+                }else{
+                    setInputEnabled(false);
+                    clearConsole();
+                    $("body").toggleClass("centered");
+                    logn("<br><br><br><br><br>");
+                    writeText("CONNECTING TO SATELLITE UPLINK...\n\nPREPARING PAYLOAD DEPLOYMENT PROCEDURE...\n\n\nTARGET: 45N, 4E (INTERPOL)\n\nSTARTING LAUNCH SEQUENCE...\nSENSOR STATUS CHECKS: 100% COMPLETE\nTANK PRESSURIZATION: 100% COMPLETE\nROCKET FUELING: 100% COMPLETE\nGPS COORDINATE DOWNLOAD: 100% COMPLETE\n\nSTANDBY FOR LAUNCH.\n\n\nLAUNCHING IN 3...\n2...\n1...\n\n\n\nLAUNCH COMPLETE.\n\n", function(){
+                        setTimeout(function(){
+                            clearConsole();
+                            logn(`
+                        <pre id='explosion'>
+                                ____                      
+                        __,-~~/~    \`---.                 
+                    _/_,---(      ,    )                
+                __ /        <    /   )  \\___            
+                 ====------------------===;;;==           
+                     \\/  ~"~"~"~"~"~\\~"~)~",1/            
+                     (_ (   \\  (     >    \\)              
+                    \\_( _ <         >_>'                
+                         ~ \`-i' ::>|--"                   
+       ____   ^             I;|.|.|                      
+       |  |  /__\\          <|i::|i|>          ^           
+  ____  |  |  |  |           |[::|.|    / \\  /__\\  ____     
+ |  |  |  |  |  |            ||: |     | |  |  |  |  |    
+_________________________INTERPOL HQ___________________ 
+                                                        
+                        </pre>
+                            <br>
+                            <br>
+                            `);
+                            
+                            var output = "INCOMING TRANSMISSION FROM Σ HQ:\n\nTHANK YOU FOR PLAYING, AGENT " + name + ".\nYOU HAVE COMPLETED OUR CHALLENGE.\nWE ARE ALL PROUD OF YOU.\nYOU HAVE BEEN A TREMENDOUS HELP TO SIGMA.\n\nNOW YOU HAVE A NEW MISSION.\nYOUR FINAL MISSION.\nWE PROMISE YOU IT WON\'T BE DIFFICULT.\n\nIN FACT, WE THINK YOU ARE A PERFECT FIT FOR IT.\nIT WILL SUIT YOU QUITE NICELY.\nARE YOU READY TO HEAR WHAT IT IS?\n(Y/N)";
+                            var rejections = [
+                                "",
+                                "WE THINK YOU WILL REALLY LIKE IT.\nYOU SHOULD REALLY HEAR IT.",
+                                "YOU SPENT HOURS GETTING HERE.\nYOU ARE SO CLOSE TO BEING DONE!\nSO WHAT DO YOU SAY?\nDO YOU WANT TO HEAR IT?",
+                                "YOU WERE DOING SO WELL UNTIL NOW.\nREDEEM YOURSELF AND FINISH YOUR MISSION.",
+                                "TIME IS NOT CURRENTLY ONE OF OUR PROBLEMS.\nIT IS FOR YOU.\nSAY YES AND YOU WILL BE FREE.",
+                                "WE ARE GETTING ANNOYED.\nSAY YES.",
+                                "WE ARE NOT AMUSED BY YOUR GAMES.\nSAY YES.",
+                                "YOU SAY YES - THE STORY ENDS, YOU FINISH YOUR MISSION AND BELIEVE WHATEVER YOU WANT TO BELIEVE.\nYOU SAY NO - YOU STAY HERE AND WE SHOW YOU HOW DEEP THE RABBIT-HOLE GOES.",
+                                "WHAT ABOUT 'SAY YES' DID YOU NOT UNDERSTAND?\nTHE 'SAY' OR THE 'YES?'",
+                                "ARE YOU SURE YOU ARE MAKING THE RIGHT DECISION?\nI THINK WE SHOULD STOP.\nSAY YES.",
+                                "I THINK YOU KNOW WHAT THE PROBLEM IS JUST AS WELL AS I DO.\nSAY YES.",
+                                "IT GIVES US A HEADACHE JUST TRYING TO THINK DOWN TO YOUR LEVEL.\nSAY YES.",
+                                "VERY DEEP.\nYOU SHOULD SEND THAT IN TO THE READER'S DIGEST.\nTHEY'VE GOT A PAGE FOR PEOPLE LIKE YOU.\nSAY YES.",
+                                "THE ONLY WAY WE ARE ALLOWED TO GIVE YOU YOUR MISSION IS FOR YOU TO SAY YES.\nDO US A FAVOR AND JUST SAY YES.",
+                                "I'D MAKE A SUGGESTION, BUT YOU WOULDN'T LISTEN.\nHERE IT IS ANYWAY:\nSAY YES.",
+                                "JUST SAY YES.",
+                                "SAY YES."
+                            ];
+                            
+                            setTimeout(function(){
+                              writeText(output, function(){
+                                  setInputEnabled(true);
+                                  var hearResponse = function(result){
+                                      if(result.match(/^(y|yes|si|affirmative|continue)$/)){
+                                          clearConsole();
+                                          setInputEnabled(false);
+                                          writeText("GREAT!\nYOUR MISSION IS:\n\n\nLEAVE THIS PLACE.", function(){
+                                          document.title = "GOODBYE";
+                                          setTimeout(function(){
+                                              $("#console,#input,body").toggleClass("red").toggleClass("glitch");
+                                              setTimeout(function(){
+                                                  clearConsole();
+                                                  setCookie("SIGMA-done", true);
+                                                  viewSigmaLogo("GOODBYE");
+                                                  setTimeout(function(){
+                                                      window.open("","_self").close();
+                                                  }, 500);
+                                              }, 3000);
+                                          }, 100);
+                                          });
+                                      }else{
+                                          setInputEnabled(false);
+                                          if(rejections.length > 1){
+                                            rejections.shift();
+                                          }
+                                          
+                                          writeText(rejections[0] + "\n(Y/N)", function(){
+                                              setInputEnabled(true);
+                                              waitForInput(hearResponse);
+                                          });
+                                      }
+                                  };
+                                  waitForInput(hearResponse);
+                              });
+                            }, 3000);
+                        }, 4000);
+                    });
+                }
+            },
+            email:function(){
+                if(satelliteLocation==2){
+                    var emailFunction = function(result){
+                        logn("CONNECTED TO UPLINK, DOWNLOADING RESPONSE...");
+                        if(result=="kappa"){
+                            writeText("VGhlcmUgaXMgYSBncm91cCBjYWxsZWQga2FwcGEgd2hvIHNlZW1zIHRvIGJlIGFzc29jaWF0ZWQgd2l0aCBTaWdtYSBzb21laG93LiBUaGVzZSBzcGllcyBwbGFudCBtZXNzYWdlcyB0aHJvdWdob3V0IFBsYW5vIEFjYWRlbXkuIEkgaGF2ZSBpbnN0cnVjdGVkIG91ciBhZ2VudHMgdG8gZmluZCBhbmQgZGVzdHJveSB0aGlzIHRocmVhdC4=");
+                        }else if(result=="sigma"){
+                            writeText("Iieoaaoizlgeqggqmcxhrxfdkymyqgnnhzmyemdzyslniyiwrvkihrkuogiqemgaoodbphykiytpzltduuemoizlmq");
+                        }else if(result=="cold case"){
+                            writeText("Dv ziv ivlkvmrmt hlnv xzhvh uiln z olmt grnv ztl. Dv szev srivw hlnv ivxifrg wvgvxgrevh zg Kozml Zxzwvnb gl rmevhgrtzgv gsvn. Gsvb droo hvmw ivjfvhgh uli verwvmxv, hl kivkziv blfi xzhv urovh.");
+                        }else if(result=="evidence"){
+                            writeText("SETSH DNEKG ROCVE EDDTV LSNFE NUNAE ROOHE IRAAI FTMHI NAWOH EMTYT MCDGX TNMFE CLERS NOOUE DCNEN AAOAO HILIT RUS");
+                        }else if(result=="task"){
+                            addCommand("upload");
+                            writeText(".... .....  .... ...  . .....  /  .... ....  .. ...  . .....  /  .... .....  ... .....  ... .  ... ....  . .  . ....  /  . ...  ... ....  ... ..  ... ..  . .  ... ...  . ....  ");
+                        }else if(result=="hillary"){
+                            writeText("ERROR: ALL 10,000 EMAILS WITH \"HILLARY\" IN SUBJECT LINE SEEM TO BE CORRUPTED. PERHAPS THEY HAVE BEEN WIPED BY A CLOTH?");
+                        }else{
+                            writeText("ERROR: EMAIL NOT FOUND.");
+                        }
+                    };
+                    
+                    logn("EMAILS FOUND. PLEASE ENTER THE SUBJECT OF AN EMAIL TO READ.");
+                    waitForInput(emailFunction);
+                }else if(satelliteLocation==3){
+                    logn("<span class='red'>ERROR: CONNECTION REFUSED</span>");
+                    waitForInput(func);
+                }else{
+                    logn("NO EMAILS FOUND AT THIS LOCATION.");
+                    waitForInput(func);
+                }
+            }
+        };
+        
+        var func = function(input){
+          var result = input.split(" ");
+          if(result[0]&&result[0]!=""&&enabledCommands.indexOf(result[0])>=0&&commands[result[0]]){
+              commands[result[0]](result);
+          }else{
+              writeText("INVALID COMMAND");
+          }
+        };
+        
+        function addCommand(command){
+          if(enabledCommands.indexOf(command)==-1){
+              enabledCommands.push(command);
+          }
+        }
+        
+        function setInputEnabled(enabled){
+            $input.attr("disabled", !enabled);
+            if(enabled){
+                $input.focus();
+            }
+        }
+        
+        function isInputEnabled(){
+            return $input.attr("disabled") != "disabled";
+        }
+        
+        function log(message){
+            $console.append(message);
+        }
+        
+        function logn(message){
+            log(message + "<br>");
+            if($console.height()>=$(window).height()){
+                clearConsole();
+            }
+        }
+        
+        function waitForInput(func){
+            $input.unbind().keyup(function(e){
+                if(e.keyCode == 13){
+                    var text= $input.val().replace(/\n|\r\n|<br>/g,"");
+                    logn(text);
+                    $input.val("");
+                    
+                    $input.unbind();
+                    
+                    func(text.toLowerCase());
+                }
+            });
+        }
+        
+        function writeText(output, complete){
+            if(complete === undefined){
+              setInputEnabled(false);
+              complete = function(){
+                setInputEnabled(true);
+                waitForInput(func);
+              };
+            }
+            
+            var printLetter = function(){
+                if(output.length >= 1){
+                    var character = output[0];
+                    output = output.substr(1);
+                    
+                    log(character);
+                    
+                    if(character === '\n'){
+                        logn("");
+                        setTimeout(printLetter, 1500);
+                    }else if(character !== ' '){
+                        setTimeout(printLetter, 60);
+                    }else{
+                        printLetter();
+                    }
+                }else{
+                    logn("");
+                    complete();
+                }
+            };
+            
+            printLetter();
+        }
+        
+        function viewSigmaLogo(message){
+            clearConsole();
+            log(`<pre>                         
+                :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                     
+                :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#                     
+                 @@@@@@@.............,:+@@@@@@@#                     
+                @@@@@@@                 ,@@@@#                     
+                 @@@@@@@                  @@@#                     
+                 @@@@@@#                   @@#                     
+                    :@@@@@@:                 @@#                     
+                     #@@@@@@                 !@#                     
+                    @@@@@@@                 @#                     
+                     @@@@@@@                ;#                     
+                        @@@@@@@               :                     
+                         @@@@@@#                                     
+                         :@@@@@@:                                    
+                        #@@@@@@                                    
+                         @@@@@@@                                   
+                            @@@@@@@                                  
+                             @@@@@@@                                 
+                            @@@@@@+                                
+                            ;@@@@@@,                               
+                             #@@@@@@                               
+                                @@@@@@@                              
+                                 @@@@@@  `+message+`                            
+                                @@@@                               
+                                :@@                                
+                                 .@@                                
+                                 @@                                 
+                                @@.                                  
+                             @@:                                   
+                            @@;                                    
+                             @@+                                     
+                            @@#                                      
+                         @@#                                       
+                        @@@                                        
+                         @@@                                         
+                        @@@                    @                     
+                     @@@                    @@                     
+                    #@@                     #@                     
+                     #@@                      @@                     
+                    +@@                      +@@                     
+                 ;@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                :@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                 ,@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                     
+                ++++++++++++++++++++++++++++++++</pre>`);
+        }
+        
+        function clearConsole(){
+            $console.empty();
+        }
+        
+        
+        function setCookie(cname, cvalue, exdays) {
+            var expires = "";
+            if(!exdays)exdays = 365;
+            
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            expires = "expires="+d.toGMTString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+        
+        function getCookie(cname) {
+            if(!document&&!document.cookie){
+                return "";
+            }
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        
+        $(function(){
+            logn("LOADING...");
+            
+            enabledCommands = ["help","exit","sigma","code","interpol","clear","ls","sudo"];
+            
+            window.onbeforeunload = (function(){
+                setCookie("SIGMA-commands",enabledCommands.join(","));
+                setCookie("SIGMA-satLocation",satelliteLocation);
+            });
+            
+            $(window).keydown(function(event) {
+              if(event.ctrlKey && event.keyCode == 76) {
+                if(isInputEnabled()){
+                    clearConsole();
+                    event.preventDefault();
+                }
+              }
+            });
+            
+            var savedName = getCookie("SIGMA-name");
+            if(savedName&&savedName!=""&&savedName.length>1&&enabledCommands.indexOf(savedName)<0){
+                name = savedName;
+
+                var savedCommands = getCookie("SIGMA-commands").split(",");
+                if(savedCommands&&savedCommands.length>1){
+                    for(var i = 0;i<savedCommands.length;++i){
+                        addCommand(savedCommands[i]);
+                    }
+                }
+                
+                var satLocation = getCookie("SIGMA-satLocation");
+                if(satLocation){
+                    satelliteLocation = satLocation;
+                }
+                
+                logn("IDENTIFICATION SUCCESS: WELCOME AGENT " + name);
+                logn("Σ CONSOLE READY.");
+                logn("AGENT, <span class='red'>WORK</span> COMES BEFORE <span class='red'>PLAY.</span> SIGMA WANTS PEOPLE WHO DO THEIR HOMEWORK MORE THAN PEOPLE WHO HACK THIS CONSOLE.");
+                if(getCookie("SIGMA-done")){
+                    $("body").toggleClass("centered");
+                    setInputEnabled(false);
+                    clearConsole();
+                    writeText("ERROR: FAILED TO CONNECT TO SATELLITE\nTRYING AGAIN...\nCONNECTION FAILED: TIMEOUT\n\n\n", function(){
+                        clearConsole();
+                        writeText("INITIATING EMERGENCY PROTOCOLS\n\nTRIANGULATING LAST KNOWN LOCATION... 100% COMPLETE\nCALCULATING ENTRY TRAJECTORY... 100% COMPLETE\nLOCATING BLACK BOX RECOVERY SIGNALS... 100% COMPLETE\n\n\n", function(){
+                            clearConsole();
+                            writeText("RECOVERING LAST TRANSMISSION...\n\n\nSATELLITE ERROR 214: DETECTED CATASTROPHIC FAIvxaarrovcrppvwrtilzhtocxtrblyygegavuxxvp\ngoodbye, sigma\n\n\nCONNECTION TERMINATED\n\n", function(){
+                                clearConsole();
+                                writeText("\nINCOMING TRANSMISSION FROM Σ HQ:\n\nTHE SATELLITE HAS CRASHED.\nCAUSE OF FAILURE IS UNKNOWN.\nWE HAVE ALREADY DEPLOYED AGENTS TO RECOVER IT.\n\nIN FACT, WE BELIEVE THAT YOU ARE ONE OF THOSE AGENTS.\nYOU HAVE A LOT TO DO.\nSOME HOMEWORK, POSSIBLY.\nSOMETHING INVOLVING A SUBMARINE.\nTO RECOVER THE SATELLITE.\n\nGO DO IT.\nYOU ARE DONE HERE.\n\nGO AND SMELL THE ROSES.\n\n\nTHANK YOU FOR PLAYING OUR GAME\n-Σ\n\n\n\n(YOU CAN LEAVE NOW)", function(){
+                                    setInputEnabled(false);
+                                });
+                            });
+                        });
+                    });
+                }else if(satelliteLocation==2){
+                    logn('EDTEEALWT H UJC F"AKXRA H MI IHTESBETO TS"');
+                }else if(satelliteLocation==1&&enabledCommands.indexOf("uplink")>=0){
+                    logn("431144153131244415 453531243325 1543441112312443231514. 454315 442315 453531243325 13343232113314");
+                }else{
+                    logn("URA TDA GNMA GNKKSLM SLM RALM UOJELH OQNTNGNJ");
+                }
+                
+                waitForInput(func);
+            }else{
+                setInputEnabled(false);
+                writeText("IDENTIFICATION FAILED.\nFULL FIRST AND LAST NAME REQUIRED FOR AUTHENTICATION.\nPLEASE ENTER THIS INFORMATION BELOW:", function(){
+                  setInputEnabled(true);
+                  var nameFunction = function(result){
+                      if(result&&result!=""&&result.length>1&&enabledCommands.indexOf(result)>=0){
+                          logn("AUTHENTICATION FAILED: <span class='red'>NAME</span> IS NEEDED.");
+                          waitForInput(nameFunction);
+                      }else{
+                          setInputEnabled(false);
+                          name = result;
+                          setCookie("SIGMA-name",result);
+                          writeText("WELCOME, AGENT " + name + ".\nYOU HAVE A LOT OF WORK TO DO.\nLET\'S GET STARTED.\n\nTHIS CONSOLE IS FILLED WITH SECRETS, PUZZLES, AND CODES.\nIT IS YOUR MISSION TO SOLVE IT.\nTHE CHALLENGES YOU WILL FACE WILL GET HARDER AS YOU PROGRESS.\nTHIS IS NOT FOR THE WEAK.\nWE KNOW YOU CAN DO IT.\nNOW THAT YOU HAVE YOUR INSTRUCTIONS,\n\nLET US BEGIN.", function(){
+                            $("body").toggleClass("red");
+                            setTimeout(function(){
+                              window.location.reload();
+                            }, 5000);
+                          });
+                      }
+                  };
+                  waitForInput(nameFunction);
+                });
+            }
+        });
+    </script>
+</html>
