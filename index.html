@@ -143,7 +143,7 @@
         
         var name;
         
-        var satelliteLocation = 1;
+        var satelliteLocation = 2;
         
         var $input = $("#input"), $console = $("#console");
         
@@ -269,11 +269,13 @@
                   logn("CURRENTLY POINTED AT ???, ??? (SIGMA)");
                 }
                 addCommand("download");
+                addCommand("hack");
+                addCommand("redirect");
                 waitForInput(func);
             },
             redirect:function(){
                 clearConsole();
-                //credits go for this sweet map to Matthew Thomas (1998)
+                //credits go for this sweet map to Matthew Thomas (2028)
                 logn(`
 <pre>
 180 150W  120W  90W   60W   30W  000   30E   60E   90E   120E  150E 180
